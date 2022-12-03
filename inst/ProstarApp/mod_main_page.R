@@ -2,6 +2,29 @@
 
 #' @title   mod_main_page_ui and mod_loading_page_server
 #' @description  A shiny Module.
+#' 
+#' @name mod_main_page
+#' 
+#' @examples 
+#' if(interactive()){
+#' library(shinyjs)
+#' library(shiny)
+#' library(shinydashboard)
+#' 
+#' 
+#' ui <- mod_main_page_ui("mod_info")
+#' 
+#' server <- function(input, output, session) {
+#'   mod_main_page_server("mod_info")
+#' }
+#' 
+#' shinyApp(ui, server)
+#' 
+#' }
+#' 
+NULL
+
+
 #'
 #' @param id shiny id
 #' @param input internal
@@ -91,7 +114,10 @@ mod_main_page_ui <- function(id){
                            }")),
             # Menus and submenus in sidebar
             br(),
-            menuItem("Home", tabName = "ProstarHome", icon = icon("home"),selected = TRUE),
+            menuItem("Home", 
+                     tabName = "ProstarHome", 
+                     icon = icon("home"),
+                     selected = TRUE),
             hr(),
             menuItem("Data Manager", 
               icon = icon("folder"), 
@@ -256,7 +282,8 @@ mod_main_page_ui <- function(id){
 
 # Module Server
 
-#' @rdname mod_mainpage
+#' @param id xxx
+#' @rdname mod_main_page
 #' @export
 #' @keywords internal
 

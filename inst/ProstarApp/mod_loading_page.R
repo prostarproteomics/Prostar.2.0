@@ -1,8 +1,23 @@
-# Module UI
-
 #' @title   mod_loading_page_ui and mod_loading_page_server
 #' @description  A shiny Module.
-#'
+#' 
+#' @name mod_loading_page
+#' 
+#' @examples 
+#' if(interactive(){
+#' library(shinyjs)
+#' library(shiny)
+#' ui <- mod_loading_page_ui("mod_info")
+#' server <- function(input, output, session) {
+#'   mod_loading_page_server("mod_info")
+#' }
+#' 
+#' shinyApp(ui, server)
+#' }
+NULL
+
+
+
 #' @param id shiny id
 #' @param input internal
 #' @param output internal
@@ -41,6 +56,7 @@ mod_loading_page_ui <- function(id){
 
 # Module Server
 
+#' @param id xxx
 #' @rdname mod_loading_page
 #' @export
 #' @keywords internal
