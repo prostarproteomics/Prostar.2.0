@@ -21,6 +21,7 @@ source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
 source(file.path(".", "mod_test.R"), local = TRUE)$value
 source(file.path(".", "mod_format_DT.R"), local = TRUE)$value
 source(file.path(".", "mod_settings.R"), local = TRUE)$value
+source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
 
 
 ## URLs for the .md files stored in the website github directory

@@ -119,6 +119,12 @@ initComplete <- function(){
 } #comonFunc.R de prostar 2.0
 
 
+#' @export
+GetExtension <- function(name) {
+  temp <- unlist(strsplit(name, ".", fixed = T))
+  return(temp[length(temp)])
+}
+
 
 
 #' @title Loads packages

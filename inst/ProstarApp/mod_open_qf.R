@@ -4,6 +4,8 @@
 #' 
 #' @description  A shiny Module.
 #' 
+#' @param id xxx
+#' 
 #' @name mod_open_qf
 #'
 #' @keywords internal
@@ -36,7 +38,7 @@ NULL
 
 
 
-#' @param id xxx
+
 #' @export 
 #' @rdname mod_open_qf
 #' @importFrom shiny NS tagList 
@@ -47,19 +49,16 @@ mod_open_qf_ui <- function(id){
   tagList(
     fileInput(ns("file"), "Open file", multiple = FALSE),
     actionButton(ns('load_qf_btn'), 'Load file'),
-    mod_staticDT_ui(ns("overview_openQF"))
+    mod_infos_dataset_ui(ns("overview"))
     #uiOutput(ns("infoAboutAggregationTool"))
   )
 }
 
-# Module Server
 
 #' @rdname mod_open_qf
 #' 
 #' @export
-#' 
-#' @param id xxx
-#' 
+
 #' @keywords internal
 #' @importFrom shinyjs info
 #' @import QFeatures
@@ -140,7 +139,7 @@ mod_open_qf_server <- function(id){
           rv.openqf$dataRead <- readRDS(input$file$datapath)
           }
           
-          if (class(rv$current.obj)[1] != "QFeatures") {
+          if (class(rv.openqf$dataRead)[1] != "QFeatures") {
             warning(warn.wrong.file)
           }
           
@@ -196,7 +195,40 @@ mod_open_qf_server <- function(id){
     })
 
     
-    reactive({rv.openDemo$dataOut })
+    
+    #observeEvent(rv.openqf$dataRead, {
+      mod_infos_dataset_server("overview", reactive({rv.openqf$dataRead}))
+    #})
+    
+    reactive({rv.openqf$dataOut})
   })
   
 }
+
+
+
+
+
+
+#----------------------------------------------------
+
+ui <- fluidPage(
+tagList(
+  mod_open_qf_ui("qf_file"),
+  textOutput('res')
+)
+)
+
+server <- function(input, output, session) {
+  rv <- reactiveValues(
+    obj = NULL
+  )
+  rv$obj <- mod_open_qf_server("qf_file")
+
+  output$res <- renderText({
+    rv$obj()
+    paste0('Names of the datasets: ', names(rv$obj()))
+  })
+}
+
+shinyApp(ui, server)
