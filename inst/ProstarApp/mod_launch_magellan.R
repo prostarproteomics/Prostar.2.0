@@ -13,12 +13,12 @@ mod_launch_magellan_ui <- function(id){
     div(
       div(
         style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-        mod_choose_pipeline_ui(ns("pipe"))
+        choose_pipeline_ui(ns("pipe"))
       ),
       div(
         style="display:inline-block; vertical-align: middle; padding-right: 20px;",
         shinyjs::hidden(div(id=ns('div_demoDataset'),
-                            mod_open_demoDataset_ui(ns('rl'))
+                            open_demoDataset_ui(ns('rl'))
         )
         )
       ),
@@ -48,7 +48,7 @@ mod_launch_magellan_server <- function(id){
     
     rv$demoData <- mod_open_demoDataset_server("rl")
     
-    rv$pipeline.name <- mod_choose_pipeline_server('pipe', 
+    rv$pipeline.name <- choose_pipeline_server('pipe', 
                                                    package = 'MSPipelines')
     
     observe({

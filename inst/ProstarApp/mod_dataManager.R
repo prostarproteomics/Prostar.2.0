@@ -5,13 +5,7 @@
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' 
-#' @param input internal
-#' 
-#' @param output internal
-#' 
-#' @param session internal
-#' 
+
 #' @param pipeline.def xxx
 #' 
 #' @return An object of class [`xxxx`]
@@ -41,7 +35,7 @@ mod_dataManager_ui <- function(id){
     
     shinyjs::hidden(
       div(id=ns('mod_demo'),
-          mod_open_demoDataset_ui(ns('rl'))
+          open_demoDataset_ui(ns('rl'))
           )
       ),
     shinyjs::hidden(
@@ -51,7 +45,7 @@ mod_dataManager_ui <- function(id){
     ),
     shinyjs::hidden(
       div(id=ns('modChoosePipeline'),
-          mod_choose_pipeline_ui(ns('pipe'))
+          choose_pipeline_ui(ns('pipe'))
       )
     ),
     actionButton(ns('send'), 'Send'),
@@ -97,7 +91,7 @@ mod_dataManager_server <- function(id){
     rv.dm$convertData <- convert$server(dataIn = reactive({NULL}))
     
     
-    rv.dm$pipeline <- mod_choose_pipeline_server('pipe',
+    rv.dm$pipeline <- choose_pipeline_server('pipe',
                                                  dataType = 'protein',
                                                  package = 'MSPipelines')
 

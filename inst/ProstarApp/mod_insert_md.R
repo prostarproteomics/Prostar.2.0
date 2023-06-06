@@ -4,16 +4,20 @@
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
-#'
+#' @param url xxx
+#' 
+#' @name mod_insert_md
+#' 
+NULL
+
+
 #' @rdname mod_insert_md
 #'
 #' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
-mod_insert_md_ui <- function(id){
+#' 
+insert_md_ui <- function(id){
   ns <- NS(id)
   tagList(
     uiOutput(ns("insertMD"))
@@ -26,7 +30,7 @@ mod_insert_md_ui <- function(id){
 #' @export
 #' @keywords internal
 
-mod_insert_md_server <- function(id, url){
+insert_md_server <- function(id, url){
   
   
   moduleServer(id, function(input, output, session){
@@ -53,9 +57,27 @@ mod_insert_md_server <- function(id, url){
   
 }
 
-## To be copied in the UI
-# mod_insert_md_ui("insert_md_ui_1")
 
-## To be copied in the server
-# callModule(mod_insert_md_server, "insert_md_ui_1")
+
+###################################################################
+#                             Example                             #
+###################################################################
+
+library(shiny)
+
+ui <- shinyUI(
+  fluidPage(
+    insert_md_ui(id = 'ex')
+  )
+)
+
+server <- function(input, output) {
+  
+  url <- "http://www.prostar-proteomics.org/md/presentation.md"
+  insert_md_server("ex", url)
+  
+}
+
+shinyApp(ui = ui, server = server)
+
 

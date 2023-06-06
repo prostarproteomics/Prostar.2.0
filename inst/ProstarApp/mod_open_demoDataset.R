@@ -4,45 +4,23 @@
 #' 
 #' @description  A shiny Module.
 #' 
+#' @param id xxx
+#' 
 #' @name mod_open_demo_dataset
 #'
 #' @keywords internal
-#' 
-#' @examples 
-#' if (interactive()){
-#' ui <- fluidPage(
-#' tagList(
-#'   mod_open_demoDataset_ui("demo"),
-#'   textOutput('res')
-#' )
-#' )
-#' 
-#' server <- function(input, output, session) {
-#'   rv <- reactiveValues(
-#'     obj = NULL
-#'   )
-#'   rv$obj <- mod_open_demoDataset_server("demo")
-#'   
-#'   output$res <- renderText({
-#'     rv$obj()
-#'     paste0('Names of the datasets: ', names(rv$obj()))
-#'   })
-  #' }
-#' 
-#' shinyApp(ui = ui, server = server)
-#' }
 #' 
 NULL
 
 
 
-#' @param id xxx
+
 #' @export 
 #' @rdname mod_open_demo_dataset
 #' @importFrom shiny NS tagList 
 #' @import shinyjs
 #' 
-mod_open_demoDataset_ui <- function(id){
+open_demoDataset_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
@@ -59,12 +37,10 @@ mod_open_demoDataset_ui <- function(id){
       div(
         style="display:inline-block; vertical-align: middle; padding-right: 20px;",
         shinyjs::disabled(
-          actionButton(
-            ns('load_dataset_btn'), 
-            'Load dataset', 
-            class=actionBtnClass)
+          actionButton(ns('load_dataset_btn'), 'Load dataset', class= MagellanNTK::GlobalSettings$actionBtnClass)
           )
-      )
+      ),
+      mod_infos_dataset_ui(ns("mod_info"))
       )
   )
 }
@@ -74,9 +50,6 @@ mod_open_demoDataset_ui <- function(id){
 #' @rdname mod_open_demo_dataset
 #' 
 #' @export
-#' 
-#' @param id xxx
-#' 
 #' @keywords internal
 #' 
 #' @import DAPARdata2
@@ -86,10 +59,12 @@ mod_open_demoDataset_ui <- function(id){
 #' @importFrom shinyjs info
 #' @import QFeatures
 #' 
-mod_open_demoDataset_server <- function(id){
+open_demoDataset_server <- function(id){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
+    
+    
     
     .package <- 'DaparToolshedData'
     
@@ -135,6 +110,7 @@ mod_open_demoDataset_server <- function(id){
     
     observeEvent(input$load_dataset_btn, {
       rv.openDemo$dataOut <- rv.openDemo$dataRead
+      mod_infos_dataset_server("mod_info", reactive({rv.openDemo$dataRead}))
     })
     
     output$linktoDemoPdf <- renderUI({
@@ -154,8 +130,36 @@ mod_open_demoDataset_server <- function(id){
   
 }
 
-## To be copied in the UI
-# mod_open_demo_dataset_ui("open_demo_dataset_ui_1")
 
-## To be copied in the server
-# callModule(mod_open_demo_dataset_server, "open_demo_dataset_ui_1")
+
+
+###################################################################
+##                                                               ##
+##                                                               ##
+###################################################################
+
+library(shiny)
+library(DaparToolshedData)
+library(shinyjs)
+
+ui <- fluidPage(
+  tagList(
+    open_demoDataset_ui("demo"),
+    htmlOutput('res')
+  )
+)
+
+server <- function(input, output, session) {
+  rv <- reactiveValues(
+    obj = NULL
+  )
+  
+  rv$obj <- open_demoDataset_server("demo")
+
+  output$res <- renderText({
+    rv$obj()
+    HTML(paste0(tags$br(tags$strong('Names of the datasets: ')), names(rv$obj())))
+  })
+}
+
+shinyApp(ui = ui, server = server)

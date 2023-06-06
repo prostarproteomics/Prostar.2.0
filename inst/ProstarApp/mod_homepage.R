@@ -19,14 +19,14 @@ mod_homepage_ui <- function(id){
   tagList(
     uiOutput(ns("citationText")),
     tags$hr(),
-    tags$div(
-      style="padding: 0 50px; float: left;",
-      img(src=base64enc::dataURI(file=system.file('ProstarApp/www/images', 
-                                                  'LogoProstarComplet.png', package='ProstarDev'), 
-                                 mime="image/png"), 
-          width='150px', 
-          height='150px')
-    ),
+    # tags$div(
+    #   style="padding: 0 50px; float: left;",
+    #   img(src=base64enc::dataURI(file=system.file('ProstarApp/www/images', 
+    #                                               'LogoProstarComplet.png', package='ProstarDev'), 
+    #                              mime="image/png"), 
+    #       width='150px', 
+    #       height='150px')
+    # ),
     tags$div(
       style="margin-top: 50px;",
       tags$p("")

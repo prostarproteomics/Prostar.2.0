@@ -6,11 +6,11 @@
 #'
 #' @param id shiny id
 #' 
-#' @param input internal
-#' 
-#' @param output internal
-#' 
-#' @param session internal
+#' @name mod_settings
+
+
+
+
 #'
 #' @rdname mod_settings
 #'

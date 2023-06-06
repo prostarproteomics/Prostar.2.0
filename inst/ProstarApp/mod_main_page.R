@@ -176,13 +176,13 @@ mod_main_page_ui <- function(id){
                   div(
                     div(
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-                      mod_choose_pipeline_ui("pipe")
+                      choose_pipeline_ui("pipe")
                     ),
                     div(
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      mod_open_demoDataset_ui('demo_data')
+                      open_demoDataset_ui('demo_data')
                       # )
                       # )
                     ),

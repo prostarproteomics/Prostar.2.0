@@ -1,4 +1,4 @@
-Package: Prostar_2.0
+Package: Prostar.2.0
 Type: Package
 Title: Provides a GUI for DAPAR
 Version: 0.9.0
@@ -24,7 +24,7 @@ Suggests: BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker,
 Imports: shinydashboardPlus,
     shinydashboard
 NeedsCompilation: no
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Packaged: 2017-10-13 06:25:55 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/

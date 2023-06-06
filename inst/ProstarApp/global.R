@@ -2,9 +2,10 @@ DAPAR.loc <- DAPARdata.loc <- Prostar.loc <- NULL
 
 
 library(fresh)
-library(DaparToolshed)
-library(QFeatures)
-library(DaparViz)
+#library(DaparToolshed)
+#library(QFeatures)
+#library(DaparViz)
+library(MagellanNTK)
 
 source(file.path(".", "mod_loading_page.R"), local = TRUE)$value
 source(file.path(".", "mod_main_page.R"), local = TRUE)$value
@@ -19,6 +20,7 @@ source(file.path(".", "mod_check_updates.R"), local = TRUE)$value
 source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
 source(file.path(".", "mod_test.R"), local = TRUE)$value
 source(file.path(".", "mod_format_DT.R"), local = TRUE)$value
+source(file.path(".", "mod_settings.R"), local = TRUE)$value
 
 
 ## URLs for the .md files stored in the website github directory
