@@ -35,7 +35,7 @@ mod_dataManager_ui <- function(id){
     
     shinyjs::hidden(
       div(id=ns('mod_demo'),
-          open_demoDataset_ui(ns('rl'))
+          mod_open_demoDataset_ui(ns('rl'))
           )
       ),
     shinyjs::hidden(
@@ -62,12 +62,13 @@ mod_dataManager_ui <- function(id){
 #' 
 #' @keywords internal
 #' 
-#' @import DAPARdata2
+#' @import DaparToolshedData
 #' @importFrom BiocGenerics get
 #' @importFrom utils data
 #' @importFrom BiocManager install
 #' @importFrom shinyjs info
 #' @import QFeatures
+#' @import DaparViz
 #' 
 mod_dataManager_server <- function(id){
   

@@ -182,7 +182,7 @@ mod_main_page_ui <- function(id){
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      open_demoDataset_ui('demo_data')
+                      mod_open_demoDataset_ui('demo_data')
                       # )
                       # )
                     ),
@@ -197,7 +197,7 @@ mod_main_page_ui <- function(id){
               tabItem(tabName = "daparviz", 
                 tagList(
                   h3("Dapar viz"),
-                  DaparViz::mod_all_ds_ui('daparviz')
+                  mod_view_dataset_ui('daparviz')
                 )
               ),
               

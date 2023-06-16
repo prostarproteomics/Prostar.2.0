@@ -18,7 +18,7 @@ mod_launch_magellan_ui <- function(id){
       div(
         style="display:inline-block; vertical-align: middle; padding-right: 20px;",
         shinyjs::hidden(div(id=ns('div_demoDataset'),
-                            open_demoDataset_ui(ns('rl'))
+                            mod_open_demoDataset_ui(ns('rl'))
         )
         )
       ),

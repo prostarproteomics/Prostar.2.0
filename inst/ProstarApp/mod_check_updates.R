@@ -18,7 +18,7 @@ mod_check_updates_ui <- function(id){
   ns <- NS(id)
   tagList(
     uiOutput(ns("baseVersions")),
-    format_DT_ui(ns('tab_versions')),
+    mod_format_DT_ui(ns('tab_versions')),
     br(), br(),
     uiOutput(ns("infoForNewVersions"))
     
@@ -49,7 +49,7 @@ mod_check_updates_server <- function(id){
       
     })
     
-    format_DT_server('tab_versions',
+    mod_format_DT_server('tab_versions',
                          table2show=reactive({getPackagesVersions()}),
                          style = reactive({NULL}))
     
@@ -115,8 +115,8 @@ mod_check_updates_server <- function(id){
         DAPAR = if (!is.null(match('DaparToolshed', names(ll.packages)))) 
           ll.packages[match('DaparToolshed', names(ll.packages))] 
         else '-',
-        DAPARdata = if (!is.null(match('DAPARdata2', names(ll.packages)))) 
-          ll.packages[match('DAPARdata2', names(ll.packages))] 
+        DAPARdata = if (!is.null(match('DaparToolshedData', names(ll.packages)))) 
+          ll.packages[match('DaparToolshedData', names(ll.packages))] 
         else '-'
       )
       

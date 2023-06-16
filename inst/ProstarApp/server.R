@@ -1,6 +1,7 @@
-options(shiny.maxRequestSize=300*1024^2) 
-options(encoding = "UTF-8")
-options(shiny.fullstacktrace = T)
+options(shiny.maxRequestSize=300*1024^2,
+        encoding = "UTF-8",
+        shiny.fullstacktrace = T
+        )
 require(compiler)
 enableJIT(3)
 
@@ -14,9 +15,20 @@ enableJIT(3)
 #' 
 #' @noRd
 shinyServer( 
-
+  
     function( input, output, session ) {
-   
+      #mod_load_package_server('load_pkg', pkg= 'DaparToolshed')
+     # browser()
+     # mod_load_package_server('load_pkg')
+      mod_loading_page_server('loadPage')
+      browser()
+      # --------------------------------------------------------------
+      # Once the server part is loaded, hide the loading page 
+      # and show th main content
+      shinyjs::hide(id = "loading_page", anim = FALSE)
+      shinyjs::show("main_page", anim = TRUE, animType = "fade")
+      
+      
   observeEvent(input$ReloadProstar, {
     js$resetProstar()
   })
@@ -57,8 +69,7 @@ shinyServer(
   #
   # Code for open demo dataset
   #
-  rv.core$result_openDemoDataset <- open_demoDataset_server('demo_data')
-  
+  rv.core$result_openDemoDataset <- mod_open_demoDataset_server('demo_data')
   observeEvent(rv.core$result_openDemoDataset(),{
      rv.core$current.obj <- rv.core$result_openDemoDataset()
      #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
@@ -66,19 +77,21 @@ shinyServer(
    })
   
   
-  #rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
-  
-  
-  # observeEvent(rv.core$tmp_dataManager$openFile(),{
-  #   rv.core$current.obj <- rv.core$tmp_dataManager$openFile()$dataset
-  #   rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-  # })
+  rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
+  observeEvent(rv.core$result_openFile(),{
+    rv.core$current.obj <- rv.core$result_openFile()
+    #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+  })
   # 
-  # observeEvent(rv.core$result_convert(),{
-  #   #browser()
-  #   rv.core$dataIn <- rv.core$result_convert()
-  #   #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
-  # })
+  
+  
+  rv.core$result_convert <- Convert_server('moduleConvert')
+  
+  observeEvent(rv.core$result_convert(),{
+    #browser()
+    rv.core$dataIn <- rv.core$result_convert()
+    #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
+  })
   
   # observe({
   #   #shinyjs::toggle('div_demoDataset', condition = !is.null(rv.core$pipeline.name()) && rv.core$pipeline.name() != 'None')
@@ -151,7 +164,7 @@ shinyServer(
   
   
   #---------------------------Server modules calls---------------------------------------------------#
-  DaparViz::mod_all_ds_server('daparviz', reactive({rv.core$current.obj}))
+  mod_view_dataset_server('daparviz', reactive({rv.core$current.obj}))
   
   #mod_test_server('tutu')
   mod_homepage_server('home')
@@ -164,11 +177,6 @@ shinyServer(
   
   
   
-  # --------------------------------------------------------------
-  # Once the server part is loaded, hide the loading page 
-  # and show th main content
-  shinyjs::hide(id = "loading_page", anim = FALSE)
-  shinyjs::show("main_page", anim = TRUE, animType = "fade")
-  
+ 
     }
 )

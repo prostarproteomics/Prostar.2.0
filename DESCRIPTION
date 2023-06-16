@@ -21,8 +21,7 @@ License: Artistic-2.0
 Depends: R (>= 4.2.2)
 Suggests: BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass
-Imports: shinydashboardPlus,
-    shinydashboard
+Imports: shinydashboardPlus, shiny, shinydashboard
 NeedsCompilation: no
 RoxygenNote: 7.2.3
 Packaged: 2017-10-13 06:25:55 UTC; sw175264
