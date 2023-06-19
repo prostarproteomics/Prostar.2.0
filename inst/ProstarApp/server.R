@@ -17,12 +17,26 @@ enableJIT(3)
 shinyServer( 
   
     function( input, output, session ) {
-      #mod_load_package_server('load_pkg', pkg= 'DaparToolshed')
-     # browser()
-     # mod_load_package_server('load_pkg')
-      mod_loading_page_server('loadPage')
-      browser()
-      # --------------------------------------------------------------
+      
+      rv.core <- reactiveValues(
+        pipeline = NULL,
+        pipeline.name = NULL,
+        dataIn = NULL,
+        result_convert = NULL,
+        result_openDemoDataset = NULL,
+        
+        # Current QFeatures object in Prostar
+        current.obj = NULL,
+        
+        # pipeline choosen by the user for its dataset
+        current.pipeline = NULL
+      )
+      
+      done <- mod_loading_page_server('loadPage')
+      #browser()
+      
+      
+      observeEvent(req(done()), {# --------------------------------------------------------------
       # Once the server part is loaded, hide the loading page 
       # and show th main content
       shinyjs::hide(id = "loading_page", anim = FALSE)
@@ -35,19 +49,7 @@ shinyServer(
   
   
   
-  rv.core <- reactiveValues(
-    pipeline = NULL,
-    pipeline.name = NULL,
-    dataIn = NULL,
-    result_convert = NULL,
-    result_openDemoDataset = NULL,
-    
-    # Current QFeatures object in Prostar
-    current.obj = NULL,
-    
-    # pipeline choosen by the user for its dataset
-    current.pipeline = NULL
-  )
+  
   
   #rv.core$pipeline.name <- choose_pipeline_server('pipe', package = 'MSPipelines')
   
@@ -176,7 +178,7 @@ shinyServer(
   #mod_bug_report_server("bug_report")
   
   
-  
+      })
  
     }
 )

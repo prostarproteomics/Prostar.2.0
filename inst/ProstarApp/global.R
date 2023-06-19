@@ -14,16 +14,16 @@ source(file.path(".", "mod_loading_page.R"), local = TRUE)$value
 
 
 
-# source(file.path(".", "mod_main_page.R"), local = TRUE)$value
+ source(file.path(".", "mod_main_page.R"), local = TRUE)$value
 # 
-# source(file.path(".", "mod_homepage.R"), local = TRUE)$value
-# source(file.path(".", "mod_choose_pipeline.R"), local = TRUE)$value
-# source(file.path(".", "mod_release_notes.R"), local = TRUE)$value
-# source(file.path(".", "mod_check_updates.R"), local = TRUE)$value
-# source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
+ source(file.path(".", "mod_homepage.R"), local = TRUE)$value
+ source(file.path(".", "mod_choose_pipeline.R"), local = TRUE)$value
+ source(file.path(".", "mod_release_notes.R"), local = TRUE)$value
+ source(file.path(".", "mod_check_updates.R"), local = TRUE)$value
+ source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
 # source(file.path(".", "mod_test.R"), local = TRUE)$value
 # source(file.path(".", "mod_settings.R"), local = TRUE)$value
-# source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
+ source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
 
 
 ## URLs for the .md files stored in the website github directory
