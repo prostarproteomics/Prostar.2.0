@@ -52,29 +52,10 @@ idleTimer();", timeoutSeconds*1000, timeoutSeconds, timeoutSeconds*1000)
 mod_loading_page_ui <- function(id){
   ns <- NS(id)
   tagList(
-    # tags$script(inactivity),
-    # shinyjs::inlineCSS(progressBar_css),
-    # absolutePanel(
-    #   id  = ns("AbsolutePanel"),
-    #   class = "panel panel-default",
-    #   style= "text-align: center; background-color: #25949A;",
-    #   top = '30%',
-    #   left = '25%',
-    #   width = "50%",
-    #   height = "150px",
-    #   draggable = FALSE,
-    #   fixed = TRUE,
-    #   tagList(
-    #     tags$h1(style='text-align: center; color: white', "Prostar is loading, please wait..."),
-    #     br(),
-    #     tags$div(class="progress",
-    #       tags$div(class="indeterminate")
-    #     )
-    #     
-    #   )
-      mod_load_package_ui(ns('load_pkg') )
-      
-    #)
+      shinyjs::useShinyjs(),
+      shinyjs::hidden(uiOutput(ns('splashscreen'))),
+      #shinyjs::hidden(uiOutput(ns('load_pkg_UI')))
+      uiOutput(ns('load_pkg_UI'))
   )
 }
 
@@ -85,21 +66,64 @@ mod_loading_page_ui <- function(id){
 #' @export
 #' @keywords internal
 
-mod_loading_page_server <- function(id){
+mod_loading_page_server <- function(id, 
+                                    pkg = NULL,
+                                    funcs = NULL){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
-    print('toto')
-    done <- mod_load_package_server('load_pkg')
+    
+    done = mod_load_package_server('load_pkg', pkg = NULL, funcs = funcs)
+    
+    
+    observeEvent(done(), {
+      print(paste0('rv$done = ', done()))
+      shinyjs::toggle('splashscreen', condition = isTRUE(done()))
+      shinyjs::toggle('load_pkg_UI', condition = !isTRUE(done()))
+    })
+    
+    
+   
+      
+    
+    output$load_pkg_UI <- renderUI({
+      
+      mod_load_package_ui(ns('load_pkg'))
+      
+    })
+    
+    
+    
+    output$splashscreen <- renderUI({
+      tagList(
+        h3('toto'),
+        tags$script(inactivity),
+        shinyjs::inlineCSS(progressBar_css),
+        absolutePanel(
+          id  = ns("AbsolutePanel"),
+          class = "panel panel-default",
+          style= "text-align: center; background-color: #25949A;",
+          top = '30%',
+          left = '25%',
+          width = "50%",
+          height = "150px",
+          draggable = FALSE,
+          fixed = TRUE,
+          tagList(
+            tags$h1(style='text-align: center; color: white', "Prostar is loading, please wait..."),
+            br(),
+            tags$div(class="progress",
+                     tags$div(class="indeterminate")
+            )
+          )
+        )
+      )
+    })
+    
+    
   })
   
 }
-
-## To be copied in the UI
-# mod_loading_page_ui("loading_page_ui_1")
-
-## To be copied in the server
-# callModule(mod_loading_page_server, "loading_page_ui_1")
 
 
 
@@ -191,9 +215,22 @@ progressBar_css <- ".progress {
     right: -8%; } }"
 
 
-## To be copied in the UI
-# mod_loading_page_ui("loading_page_ui_1")
+#___________________________________________________________
+ui <- mod_loading_page_ui("mod_pkg")
 
-## To be copied in the server
-# callModule(mod_loading_page_server, "loading_page_ui_1")
+server <- function(input, output, session) {
+  funcs <- c('Convert', 
+             'mod_open_dataset', 
+             'mod_open_demoDataset',
+             'mod_view_dataset', 
+             'mod_insert_md')
+  
+  done <- mod_loading_page_server("mod_pkg", funcs = funcs)
+  #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')
+  
+
+}
+
+shinyApp(ui, server)
+
 
