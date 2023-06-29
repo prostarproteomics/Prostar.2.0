@@ -40,16 +40,7 @@ idleTimer();", timeoutSeconds*1000, timeoutSeconds, timeoutSeconds*1000)
 mod_load_package_ui <- function(id) {
   ns <- NS(id)
   
-  tagList(
-    shinyjs::useShinyjs(),
-    h3('Choose packages to load'),
-   # shinyjs::hidden(uiOutput(ns('splashscreen'))),
-    # shinyjs::hidden(uiOutput(ns('checkUi'))),
-    # shinyjs::hidden(actionButton(ns('load_pkg'), 'Load package'))
-    # 
-   uiOutput(ns('checkUi')),
-   actionButton(ns('load_pkg'), 'Load package')
-  )
+  uiOutput(ns('load_pkg'))
 }
 
 
@@ -75,11 +66,13 @@ mod_load_package_server <- function(id, pkg = NULL, funcs = NULL) {
       list.funcs = lapply(setNames(nm=funcs), function(x) NULL)
       )
    
-    observeEvent(id, {
-      #browser()
-      #shinyjs::toggle('splashscreen', condition = !is.null(pkg))
-      shinyjs::toggle('div_checkUi', condition = is.null(pkg))
-      shinyjs::toggle('div_load_pkg', condition = is.null(pkg))
+    
+    output$load_pkg <- renderUI({
+      req(is.null(pkg))
+      wellPanel(
+        h3('Choose packages to load'),
+        uiOutput(ns('checkUi')),
+        actionButton(ns('load_pkg'), 'Load package'))
     })
     
     

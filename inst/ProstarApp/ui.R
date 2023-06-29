@@ -23,8 +23,10 @@ shinyUI(
         #theme = shinythemes::shinytheme("cerulean"),
         
         titlePanel("", windowTitle = "Prostar"),
-        div(id = "loading_page", mod_loading_page_ui('loadPage') )
-        #shinyjs::hidden(div(id='main_page', mod_main_page_ui('mainPage')))
+        div(id = 'div_loadapp_module', loadapp_ui('loadapp_module')),
+        hidden(div(id = 'div_mainapp_module', mainapp_ui('mainapp_module')))
+
+        
     )
 )
 
