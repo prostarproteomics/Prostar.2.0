@@ -71,7 +71,8 @@ mod_load_package_server <- function(id, pkg = NULL, funcs = NULL) {
       req(is.null(pkg))
       wellPanel(
         h3('Choose packages to load'),
-        uiOutput(ns('checkUi')),
+        #uiOutput(ns('checkUi')),
+        rv$m,
         actionButton(ns('load_pkg'), 'Load package'))
     })
     
@@ -111,12 +112,6 @@ mod_load_package_server <- function(id, pkg = NULL, funcs = NULL) {
       })
 
 
-    # output$ui <- renderUI({
-    #   #req(is.null(pkg))
-    #   
-    #   actionButton(ns('load_pkg'), 'Load package')
-    # })
-    
   output$checkUi <- renderUI({
     #req(rv$m)
     #browser()

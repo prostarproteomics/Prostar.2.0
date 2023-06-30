@@ -108,10 +108,7 @@ mainapp_ui <- function(id){
         shinydashboard::dashboardSidebar(
           shinydashboard::sidebarMenu(id = "sb",
             # inactiveClass for import menus inactivation 
-            tags$head(tags$style(".inactiveLink {
-                           pointer-events: none;
-                           background-color: grey;
-                           }")),
+            tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
             # Menus and submenus in sidebar
             br(),
             menuItem("Home", 
@@ -160,14 +157,14 @@ mainapp_ui <- function(id){
             # body content
             tabItems(
               tabItem(tabName = "ProstarHome", class="active",
-                mod_homepage_ui('home')
+                mod_homepage_ui(ns('home'))
               ),
               # tabItem(tabName = "openFile", h3("Open QFeature file"),
               #         mod_import_file_from_ui("open_file")),
               tabItem(tabName = "convert", 
                 tagList(
                   h3("Convert datas"),
-                  uiOutput('show_convert')
+                  nav_ui(ns('Convert'))
                 )
               ),
               tabItem(tabName = "demoData", 
@@ -182,14 +179,14 @@ mainapp_ui <- function(id){
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      mod_open_demoDataset_ui('demo_data')
+                      mod_open_demoDataset_ui(ns('demo_data'))
                       # )
                       # )
                     ),
-                    div(
-                      style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-                      actionButton('load_dataset_btn', 'Load dataset', class=actionBtnClass)
-                    )
+                    # div(
+                    #   style="display:inline-block; vertical-align: middle; padding-right: 20px;",
+                    #   actionButton('load_dataset_btn', 'Load dataset', class=actionBtnClass)
+                    # )
                   )
                 )
               ),
@@ -197,7 +194,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "daparviz", 
                 tagList(
                   h3("Dapar viz"),
-                  mod_view_dataset_ui('daparviz')
+                  mod_view_dataset_ui(ns('daparviz'))
                 )
               ),
               
@@ -286,7 +283,6 @@ mainapp_ui <- function(id){
 #' @rdname mod_main_page
 #' @export
 #' @keywords internal
-
 mainapp_server <- function(id){
   
   moduleServer(id, function(input, output, session){
@@ -357,11 +353,15 @@ mainapp_server <- function(id){
     # 
     
     
-    rv.core$result_convert <- Convert_server('moduleConvert')
+    #rv.core$result_convert <- Convert_server('Convert')
     
-    observeEvent(rv.core$result_convert(),{
+     rv.core$result_convert <- nav_server(id = 'Convert',
+                                          dataIn = reactive({data.frame()}))
+     
+     
+    observeEvent(rv.core$result_convert$dataOut()$trigger,{
       #browser()
-      rv.core$dataIn <- rv.core$result_convert()
+      rv.core$dataIn <- rv.core$result_convert$dataOut()$value
       #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
     })
     

@@ -30,10 +30,13 @@ shinyServer(
       # Once the server part is loaded, hide the loading page 
       # and show th main content
         
-        #browser()
+      #  browser()
       shinyjs::hide('div_loadapp_module', anim = TRUE, animType = "fade", time=3)
       shinyjs::show('div_mainapp_module', anim = TRUE, animType = "fade", time=3)
+      
+      mainapp_server('mainapp_module')
       })
+
  
     }
 )

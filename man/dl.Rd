@@ -46,3 +46,6 @@ NA
 \description{
 A shiny Module.
 }
+\examples{
+
+}

@@ -32,7 +32,7 @@ loadapp_ui <- function(id){
   ns <- NS(id)
   tagList(
       shinyjs::useShinyjs(),
-      shinyjs::hidden(div(id=ns('div_splashscreen'), uiOutput(ns('splashscreen')))),
+      div(id=ns('div_splashscreen'), uiOutput(ns('splashscreen'))),
       shinyjs::hidden(div(id=ns('div_load_pkg'), uiOutput(ns('load_pkg'))))
 
   )
@@ -54,8 +54,8 @@ loadapp_server <- function(id,
     
     
     observe({
-      shinyjs::toggle('div_splashscreen', condition = dataOut$pkg.loaded && dataOut$files.sourced)
-      shinyjs::toggle('div_load_pkg', condition = !dataOut$pkg.loaded)
+      shinyjs::toggle('div_splashscreen', condition = is.null(rv$m))
+      shinyjs::toggle('div_load_pkg', condition = !is.null(rv$m) && !dataOut$pkg.loaded)
     })
     
     
@@ -89,7 +89,8 @@ loadapp_server <- function(id,
       files.sourced = FALSE)
     
     rv <- reactiveValues(
-      list.funcs = lapply(setNames(nm=funcs), function(x) NULL)
+      list.funcs = lapply(setNames(nm=funcs), function(x) NULL),
+      m = NULL
     )
     
     
@@ -160,7 +161,7 @@ loadapp_server <- function(id,
         }
       })
       
-      
+      #browser()
       
       dataOut$pkg.loaded <- TRUE
     })
@@ -169,7 +170,7 @@ loadapp_server <- function(id,
     
     # Second step:  source files
     observeEvent(req(dataOut$pkg.loaded), {
-       #source(file.path(".", "mod_mainapp.R"), local = TRUE)$value
+      # source(file.path(".", "mod_mainapp.R"), local = TRUE)$value
       
       
       # source(file.path(".", "mod_homepage.R"), local = TRUE)$value
