@@ -148,23 +148,23 @@ loadapp_server <- function(id,
     observeEvent(input$load_pkg, {
       req(!isTRUE(rv$pkg.loaded))
       
-      lapply(names(rv$list.funcs), function(x){
-        content <- rv$list.funcs[[x]]
-        if (is.null(content)){
-          prefix <- 'default_'
-        } else {
-          library(input[[x]], character.only = TRUE)
-          prefix <- ''
-        }
-        
-        assign(paste0(x, '_ui'), eval(parse(text = paste0(prefix, x, '_ui'))))
-        assign(paste0(x, '_server'), eval(parse(text = paste0(prefix, x, '_server'))))
-        if (x=='Convert')
-          assign(paste0(x, '_conf'), eval(parse(text = paste0(prefix, x, '_conf'))))
-      })
-      
-      #browser()
-      
+      # lapply(names(rv$list.funcs), function(x){
+      #   content <- rv$list.funcs[[x]]
+      #   if (is.null(content)){
+      #     prefix <- 'default_'
+      #   } else {
+      #     library(input[[x]], character.only = TRUE)
+      #     prefix <- ''
+      #   }
+      #   
+      #   assign(paste0(x, '_ui'), eval(parse(text = paste0(prefix, x, '_ui'))))
+      #   assign(paste0(x, '_server'), eval(parse(text = paste0(prefix, x, '_server'))))
+      #   if (x=='Convert')
+      #     assign(paste0(x, '_conf'), eval(parse(text = paste0(prefix, x, '_conf'))))
+      # })
+      # 
+      library(DaparToolshed)
+      library(DaparViz)
       dataOut$pkg.loaded <- TRUE
     })
     

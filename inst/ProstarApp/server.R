@@ -20,8 +20,8 @@ shinyServer(
       
       done <- loadapp_server('loadapp_module', funcs = funcs)
       
-      observeEvent(req(done()), {
-
+      #observeEvent(req(done()), {
+        observe({
       # Once the server part is loaded, hide the loading page 
       # and show th main content
         

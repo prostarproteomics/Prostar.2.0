@@ -31,7 +31,7 @@ mod_homepage_ui <- function(id){
       style="margin-top: 50px;",
       tags$p("")
     ),
-    uiOutput(ns("versionsText")),
+    #uiOutput(ns("versionsText")),
     tags$br(), tags$br(),
     uiOutput(ns('NoteForNewVersion')),
     

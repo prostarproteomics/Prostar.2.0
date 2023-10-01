@@ -92,7 +92,7 @@ mainapp_ui <- function(id){
           # links Prostar website and github
           tags$li(class="dropdown",
             a(href="http://www.prostar-proteomics.org/",
-              img(src="logo.png",
+              img(src="LogoProstarComplet.png",
                 title="Prostar website",
                 height="17px"))),
           tags$li(class="dropdown",
@@ -193,7 +193,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "daparviz", 
                 tagList(
                   h3("Dapar viz"),
-                  mod_view_dataset_ui(ns('daparviz'))
+                  DaparViz::mod_view_dataset_ui(ns('daparviz'))
                 )
               ),
               
@@ -435,7 +435,7 @@ mainapp_server <- function(id){
     
     
     #---------------------------Server modules calls---------------------------------------------------#
-    mod_view_dataset_server('daparviz', reactive({rv.core$current.obj}))
+    DaparViz::mod_view_dataset_server('daparviz', reactive({rv.core$current.obj}))
     
     #mod_test_server('tutu')
     mod_homepage_server('home')
