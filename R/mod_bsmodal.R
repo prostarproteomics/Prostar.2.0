@@ -55,11 +55,11 @@ bsmodal_server <- function(id,
     }
     
     
-    jqui_resizable(paste0("#",ns("window")," .modal-content")
-                   ,options = list(minHeight = 500, minWidth=500  ))
+    # jqui_resizable(paste0("#",ns("window")," .modal-content")
+    #                ,options = list(minHeight = 500, minWidth=500  ))
     
-    jqui_draggable(paste0("#",ns("window")," .modal-content")
-                   , options = list(revert=FALSE))
+    # jqui_draggable(paste0("#",ns("window")," .modal-content")
+    #                , options = list(revert=FALSE))
     
     
     output$bsmodal_ui <- renderUI({
@@ -108,5 +108,47 @@ server <- function(input, output) {
   )
 }
   
+shinyApp(ui = ui, server = server)
+
+
+
+# Example in a module
+#
+library(shiny)
+library(shinyBS)
+
+
+loadapp_ui <- function(id){
+  ns <- NS(id)
+  uiOutput(ns('tutu'))
+}
+
+loadapp_server <- function(id){
+  moduleServer(id, function(input, output, session){
+    ns <- session$ns
+    
+    
+    output$tutu <- renderUI({
+      bsmodal_ui(id = ns("tbl"))
+    })
+    
+    bsmodal_server(id = "tbl",
+                   title = "test2",
+                   uiContent = p("test2")
+    )
+    })
+}
+
+
+
+ui <- fluidPage(
+  loadapp_ui(id = "tbl1")
+)
+
+server <- function(input, output) {
+  
+  loadapp_server(id = "tbl1")
+}
+
 shinyApp(ui = ui, server = server)
 

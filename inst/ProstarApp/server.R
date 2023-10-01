@@ -18,11 +18,6 @@ shinyServer(
   
     function(input, output, session ) {
       
-      funcs <- c('Convert', 
-                 'mod_open_dataset', 
-                 'mod_open_demoDataset',
-                 'mod_view_dataset', 
-                 'mod_insert_md')
       done <- loadapp_server('loadapp_module', funcs = funcs)
       
       observeEvent(req(done()), {

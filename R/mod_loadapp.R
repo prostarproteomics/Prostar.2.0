@@ -34,6 +34,7 @@ loadapp_ui <- function(id){
       shinyjs::useShinyjs(),
       div(id=ns('div_splashscreen'), uiOutput(ns('splashscreen'))),
       shinyjs::hidden(div(id=ns('div_load_pkg'), uiOutput(ns('load_pkg'))))
+      #hidden(div(id = 'div_mainapp_module', mainapp_ui('mainapp_module')))
 
   )
 }
@@ -94,8 +95,10 @@ loadapp_server <- function(id,
     )
     
     
+    
     output$load_pkg <- renderUI({
       req(is.null(pkg))
+      
       tagList(
         h3('Choose packages to load'),
         #uiOutput(ns('checkUi'))
@@ -148,17 +151,16 @@ loadapp_server <- function(id,
       lapply(names(rv$list.funcs), function(x){
         content <- rv$list.funcs[[x]]
         if (is.null(content)){
-          assign(paste0(x, '_ui'), eval(parse(text = paste0('generic_', x, '_ui'))))
-          assign(paste0(x, '_server'), eval(parse(text = paste0('generic_', x, '_server'))))
+          prefix <- 'default_'
         } else {
           library(input[[x]], character.only = TRUE)
-          assign(paste0(x, '_ui'), eval(parse(text = paste0(x, '_ui'))))
-          assign(paste0(x, '_server'), eval(parse(text = paste0(x, '_server'))))
-          
-          # Exception
-          if (x=='Convert')
-            assign(paste0(x, '_conf'), eval(parse(text = paste0(x, '_conf'))))
+          prefix <- ''
         }
+        
+        assign(paste0(x, '_ui'), eval(parse(text = paste0(prefix, x, '_ui'))))
+        assign(paste0(x, '_server'), eval(parse(text = paste0(prefix, x, '_server'))))
+        if (x=='Convert')
+          assign(paste0(x, '_conf'), eval(parse(text = paste0(prefix, x, '_conf'))))
       })
       
       #browser()
@@ -283,7 +285,9 @@ progressBar_css <- ".progress {
 
 
 #___________________________________________________________
-ui <- loadapp_ui("mod_pkg")
+ui <- fluidPage(
+  loadapp_ui("mod_pkg")
+)
 
 server <- function(input, output, session) {
   funcs <- c('Convert', 

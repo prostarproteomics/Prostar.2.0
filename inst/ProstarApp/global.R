@@ -9,8 +9,22 @@ library(MagellanNTK)
 #source(file.path(".", "mod_load_package.R"), local = TRUE)$value
 #source(file.path(".", "mod_loadapp.R"), local = TRUE)$value
 #source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
+funcs <- c('Convert', 
+           'mod_open_dataset', 
+           'mod_open_demoDataset',
+           'mod_view_dataset', 
+           'mod_insert_md',
+           'mod_format_DT')
 
+# lapply(funcs, function(x){
+#   assign(paste0(x, '_ui'), eval(parse(text = paste0('generic_', x, '_ui'))))
+#   assign(paste0(x, '_server'), eval(parse(text = paste0('generic_', x, '_server'))))
+#   # Exception
+#   if (x=='Convert')
+#     assign(paste0(x, '_conf'), eval(parse(text = paste0('generic_', x, '_conf'))))
+#   })
 
+#browser()
 ## URLs for the .md files stored in the website github directory
 base_URL <- "http://www.prostar-proteomics.org/md/"
 URL_FAQ <- paste0(base_URL, "FAQ.md")

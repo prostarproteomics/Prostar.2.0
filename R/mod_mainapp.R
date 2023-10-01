@@ -39,6 +39,7 @@ NULL
 #' @importFrom shinyjs inlineCSS
 mainapp_ui <- function(id){
   ns <- NS(id)
+  
   div(
       id = "header",
     
@@ -87,9 +88,7 @@ mainapp_ui <- function(id){
           #     class = "logo-lg", "Prostar")
           # ),
           # button to mimic data loaded
-          tags$li(class="dropdown",
-            actionButton('browser', 'Browser()')
-          ),
+          tags$li(class="dropdown", actionButton('browser', 'Console')),
           # links Prostar website and github
           tags$li(class="dropdown",
             a(href="http://www.prostar-proteomics.org/",
@@ -159,8 +158,8 @@ mainapp_ui <- function(id){
               tabItem(tabName = "ProstarHome", class="active",
                 mod_homepage_ui(ns('home'))
               ),
-              # tabItem(tabName = "openFile", h3("Open QFeature file"),
-              #         mod_import_file_from_ui("open_file")),
+              tabItem(tabName = "openFile", h3("Open QFeature file"),
+                       mod_open_dataset_ui("open_file")),
               tabItem(tabName = "convert", 
                 tagList(
                   h3("Convert datas"),
@@ -345,7 +344,7 @@ mainapp_server <- function(id){
     })
     
     
-    rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
+    rv.core$result_openFile <- mod_open_dataset_server('open_file')
     observeEvent(rv.core$result_openFile(),{
       rv.core$current.obj <- rv.core$result_openFile()
       #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
