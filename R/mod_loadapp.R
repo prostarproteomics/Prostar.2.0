@@ -165,7 +165,8 @@ loadapp_server <- function(id,
       dataOut$files.sourced <- TRUE
       
       
-      rv$dataOut <- rv$list.funcs
+      rv$dataOut <- reactiveValuesToList(input)
+      
     })
     
     
