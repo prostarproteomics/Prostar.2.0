@@ -32,7 +32,8 @@ loadapp_ui <- function(id){
   ns <- NS(id)
   tagList(
       shinyjs::useShinyjs(),
-      div(id=ns('div_splashscreen'), uiOutput(ns('splashscreen'))),
+      div(id=ns('div_splashscreen'), 
+          uiOutput(ns('splashscreen'))),
       shinyjs::hidden(div(id=ns('div_load_pkg'), uiOutput(ns('load_pkg'))))
       #hidden(div(id = 'div_mainapp_module', mainapp_ui('mainapp_module')))
 
@@ -91,7 +92,8 @@ loadapp_server <- function(id,
     
     rv <- reactiveValues(
       list.funcs = lapply(setNames(nm=funcs), function(x) NULL),
-      m = NULL
+      m = NULL,
+      dataOut = NULL
     )
     
     
@@ -109,34 +111,36 @@ loadapp_server <- function(id,
     
     
     observeEvent(req(funcs), ignoreInit = FALSE, {
-      rv$list.funcs <- lapply(setNames(nm=funcs), function(x) NULL)
+      #rv$list.funcs <- lapply(setNames(nm=funcs), function(x) 'Prostar.2.0')
       
       lapply(funcs, function(x){
         find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
         find_server_func <- find_funs(paste0(x, '_server'))$package_name
-        rv$list.funcs[[x]] <- append(rv$list.funcs[[x]], unique(find_ui_func, find_server_func))
+        ind <- match('Prostar.2.0', unique(find_ui_func, find_server_func))
+        pkg2add <- unique(find_ui_func, find_server_func)
+        rv$list.funcs[[x]] <- append(rv$list.funcs[[x]], pkg2add)
       }
       )
       
-      mods <- names(rv$list.funcs)
-      pkgs <- unique(unname(unlist(rv$list.funcs)))
-      n <- length(names(rv$list.funcs))
-      
-      rv$m <- matrix(
-        rep('', length(mods)), 
-        nrow = length(mods), 
-        ncol = 1, 
-        byrow = TRUE,
-        dimnames = list(names(rv$list.funcs), 'Packages')
-      )
+      # 
+      # mods <- names(rv$list.funcs)
+      # pkgs <- unique(unname(unlist(rv$list.funcs)))
+      # n <- length(names(rv$list.funcs))
+      # 
+      rv$m <- matrix(rep('', length(funcs)), 
+                     nrow = length(funcs), 
+                     ncol = 1, 
+                     byrow = TRUE,
+                     dimnames = list(funcs, 'Packages')
+                     )
       
       
       rv$m <- lapply(names(rv$list.funcs), function(x){
-        content <- rv$list.funcs[[x]]
+        content <- setNames(paste0(rv$list.funcs[[x]], '::', x), nm = rv$list.funcs[[x]])
         if (!is.null(content))
           list(
             h3(x),
-            radioButtons(ns(x), '', choices=content)
+            radioButtons(ns(x), '', choices = content)
           )
       })
 
@@ -146,32 +150,8 @@ loadapp_server <- function(id,
 
     
     observeEvent(input$load_pkg, {
-      req(!isTRUE(rv$pkg.loaded))
       
-      # lapply(names(rv$list.funcs), function(x){
-      #   content <- rv$list.funcs[[x]]
-      #   if (is.null(content)){
-      #     prefix <- 'default_'
-      #   } else {
-      #     library(input[[x]], character.only = TRUE)
-      #     prefix <- ''
-      #   }
-      #   
-      #   assign(paste0(x, '_ui'), eval(parse(text = paste0(prefix, x, '_ui'))))
-      #   assign(paste0(x, '_server'), eval(parse(text = paste0(prefix, x, '_server'))))
-      #   if (x=='Convert')
-      #     assign(paste0(x, '_conf'), eval(parse(text = paste0(prefix, x, '_conf'))))
-      # })
-      # 
-      library(DaparToolshed)
-      library(DaparViz)
-      dataOut$pkg.loaded <- TRUE
-    })
-    
-    
-    
-    # Second step:  source files
-    observeEvent(req(dataOut$pkg.loaded), {
+      browser()
       # source(file.path(".", "mod_mainapp.R"), local = TRUE)$value
       
       
@@ -183,13 +163,14 @@ loadapp_server <- function(id,
       # source(file.path(".", "mod_test.R"), local = TRUE)$value
       # source(file.path(".", "mod_settings.R"), local = TRUE)$value
       dataOut$files.sourced <- TRUE
+      
+      
+      rv$dataOut <- rv$list.funcs
     })
     
-    reactive({dataOut$pkg.loaded && dataOut$files.sourced})
     
-    
-    
-    
+    reactive({rv$dataOut})
+
   })
   
 }
@@ -291,15 +272,16 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   funcs <- c('Convert', 
-             'mod_open_dataset', 
-             'mod_open_demoDataset',
-             'mod_view_dataset', 
-             'mod_insert_md')
+             'open_dataset', 
+             'open_demoDataset',
+             'view_dataset')
   
   done <- loadapp_server("mod_pkg", funcs = funcs)
   #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')
   
-
+  observeEvent(req(done()), {
+               print(done())
+    })
 }
 
 shinyApp(ui, server)

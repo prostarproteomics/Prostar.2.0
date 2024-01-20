@@ -12,26 +12,43 @@
 
 #' @export 
 #' @importFrom shiny NS tagList 
-mod_insert_md_ui <- function(id){
+insert_md_ui <- function(id){
   ns <- NS(id)
-  uiOutput(ns("insertMD"))
+  tagList(
+    h3(style="color: blue;", '-- Default insert markdown module --'),
+    uiOutput(ns('openURLButton_UI')),
+    htmlOutput(ns("insertMD"))
+  )
 }
 
 # Module Server
 
 #' @rdname mod_insert_md
 #' @export
-mod_insert_md_server <- function(id, url){
+insert_md_server <- function(id, 
+                                 url,
+                                 link_URL = NULL){
   
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
+    output$openURLButton_UI <- renderUI({
+      req(!is.null(link_URL))
+      shiny::actionLink(inputId = ns("openURL"), 
+                        label = "Open in new tab")
+    })
+    
+    
+    observeEvent(input$openURL,{
+      browseURL(link_URL)
+    })
     
     output$insertMD <- renderUI({
       tryCatch(
         {
-          includeMarkdown(url)
+          includeMarkdown(readLines(url))
+          
         }
         , warning = function(w) {
           tags$p("URL not found<br>",conditionMessage(w))
@@ -47,3 +64,24 @@ mod_insert_md_server <- function(id, url){
   })
   
 }
+
+
+
+
+
+
+ui <- fluidPage(
+  insert_md_ui('tree')
+)
+
+
+server <- function(input, output) {
+  
+  insert_md_server('tree', 
+                       url = 'http://www.prostar-proteomics.org/md/presentation.md',
+                       link_URL = 'https://www.prostar-proteomics.org/#Frequently_asked_questions')
+  
+}
+
+shinyApp(ui = ui, server = server)
+

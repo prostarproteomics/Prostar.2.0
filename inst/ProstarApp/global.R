@@ -10,11 +10,9 @@ library(MagellanNTK)
 #source(file.path(".", "mod_loadapp.R"), local = TRUE)$value
 #source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
 funcs <- c('Convert', 
-           'mod_open_dataset', 
-           'mod_open_demoDataset',
-           'mod_view_dataset', 
-           'mod_insert_md',
-           'mod_format_DT')
+           'open_dataset', 
+           'open_demoDataset',
+           'view_dataset')
 
 # lapply(funcs, function(x){
 #   assign(paste0(x, '_ui'), eval(parse(text = paste0('generic_', x, '_ui'))))

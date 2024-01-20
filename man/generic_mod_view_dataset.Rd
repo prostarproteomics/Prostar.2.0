@@ -2,13 +2,13 @@
 % Please edit documentation in R/default_mod_view_dataset.R
 \name{generic_mod_view_dataset}
 \alias{generic_mod_view_dataset}
-\alias{default_mod_view_dataset_ui}
-\alias{default_mod_view_dataset_server}
+\alias{mod_view_dataset_ui}
+\alias{mod_view_dataset_server}
 \title{mod_open_dataset_ui and mod_open_dataset_server}
 \usage{
-default_mod_view_dataset_ui(id)
+mod_view_dataset_ui(id)
 
-default_mod_view_dataset_server(id, data)
+mod_view_dataset_server(id, data)
 }
 \arguments{
 \item{id}{xxx}

@@ -21,7 +21,7 @@ NULL
 #' @import shinyjs
 #' @import DaparViz
 #' 
-default_mod_open_demoDataset_ui <- function(id){
+open_demoDataset_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3(style="color: blue;", '-- Default demo dataset module --')
@@ -37,7 +37,7 @@ default_mod_open_demoDataset_ui <- function(id){
 #' @importFrom utils data
 #' @importFrom shinyjs info
 #' 
-default_mod_open_demoDataset_server <- function(id){
+open_demoDataset_server <- function(id){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -62,7 +62,7 @@ default_mod_open_demoDataset_server <- function(id){
 
 library(shiny)
 
-ui <- default_mod_open_demoDataset_ui("demo")
+ui <- open_demoDataset_ui("demo")
 
 
 server <- function(input, output, session) {
@@ -70,7 +70,7 @@ server <- function(input, output, session) {
     obj = NULL
   )
   
-  rv$obj <- default_mod_open_demoDataset_server("demo")
+  rv$obj <- open_demoDataset_server("demo")
 
 }
 

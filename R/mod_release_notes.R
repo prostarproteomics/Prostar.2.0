@@ -22,9 +22,9 @@ mod_release_notes_ui <- function(id){
                         open = "Current release",
                         multiple = TRUE,
                         shinyBS::bsCollapsePanel("Current release", 
-                                                 mod_insert_md_ui(ns("versionNotes_MD")),style = "info"),
+                                                 insert_md_ui(ns("versionNotes_MD")),style = "info"),
                         shinyBS::bsCollapsePanel("Former releases", 
-                                                 mod_insert_md_ui(ns("formerReleases_MD")),style = "info")
+                                                 insert_md_ui(ns("formerReleases_MD")),style = "info")
     )
   )
 }
@@ -39,8 +39,8 @@ mod_release_notes_server <- function(id){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
-    mod_insert_md_server("versionNotes_MD",URL_versionNotes)
-    mod_insert_md_server("formerReleases_MD",URL_formerReleases)
+    insert_md_server("versionNotes_MD",URL_versionNotes)
+    insert_md_server("formerReleases_MD",URL_formerReleases)
     
   })
   

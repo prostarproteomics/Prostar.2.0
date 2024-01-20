@@ -27,17 +27,16 @@ mod_homepage_ui <- function(id){
     #       width='150px', 
     #       height='150px')
     # ),
-    tags$div(
-      style="margin-top: 50px;",
-      tags$p("")
-    ),
-    #uiOutput(ns("versionsText")),
-    tags$br(), tags$br(),
+    tags$div(style="margin-top: 50px;",
+             tags$p("")
+             ),
+    tags$br(), 
+    tags$br(),
     uiOutput(ns('NoteForNewVersion')),
     
     #uiOutput("descriptionText")
     #includeMarkdown(URL_ProstarPresentation)
-    mod_insert_md_ui(ns("ProstarPresentation_MD"))
+    insert_md_ui(ns("ProstarPresentation_MD"))
   )
 }
     
@@ -53,7 +52,7 @@ mod_homepage_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    mod_insert_md_server("ProstarPresentation_MD",URL_ProstarPresentation)
+    insert_md_server("ProstarPresentation_MD",URL_ProstarPresentation)
     
     output$citationText <- renderUI({
       tagList(

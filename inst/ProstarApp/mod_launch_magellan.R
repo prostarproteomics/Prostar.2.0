@@ -11,8 +11,7 @@ mod_launch_magellan_ui <- function(id){
   ns <- NS(id)
   tagList(
     div(
-      div(
-        style="display:inline-block; vertical-align: middle; padding-right: 20px;",
+      div(style="display:inline-block; vertical-align: middle; padding-right: 20px;",
         choose_pipeline_ui(ns("pipe"))
       ),
       div(
@@ -22,8 +21,7 @@ mod_launch_magellan_ui <- function(id){
         )
         )
       ),
-      div(
-        style="display:inline-block; vertical-align: middle; padding-right: 20px;",
+      div(style="display:inline-block; vertical-align: middle; padding-right: 20px;",
         shinyjs::hidden(actionButton(ns('load_dataset_btn'), 'Load dataset', class=actionBtnClass))
       )
     )

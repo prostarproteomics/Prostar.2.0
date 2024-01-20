@@ -74,12 +74,13 @@ mainapp_ui <- function(id){
           #tags$style(".main-header .logo {height: 20px;}"),
           #tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
           #tags$style(".navbar {min-height:20px !important}"),
-          tags$style(".skin-blue .main-header .navbar {background-color: green;}")
+          tags$style(".skin-blue .main-header .navbar {background-color: rgb(20,97,117);}")
         ),
           ### changing logo
           title = dashboardthemes::shinyDashboardLogo(
             theme = "blue_gradient",
-            boldText = "Prostar"
+            boldText = "Prostar",
+            badgeText = "v2"
           ),
           # title = tagList(
           #   tags$span(
@@ -92,7 +93,7 @@ mainapp_ui <- function(id){
           # links Prostar website and github
           tags$li(class="dropdown",
             a(href="http://www.prostar-proteomics.org/",
-              img(src="LogoProstarComplet.png",
+              img(src="www/images/LogoProstarComplet.png",
                 title="Prostar website",
                 height="17px"))),
           tags$li(class="dropdown",
@@ -159,7 +160,7 @@ mainapp_ui <- function(id){
                 mod_homepage_ui(ns('home'))
               ),
               tabItem(tabName = "openFile", h3("Open QFeature file"),
-                       mod_open_dataset_ui("open_file")),
+                       open_dataset_ui("open_file")),
               tabItem(tabName = "convert", 
                 tagList(
                   h3("Convert datas"),
@@ -178,7 +179,7 @@ mainapp_ui <- function(id){
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      mod_open_demoDataset_ui(ns('demo_data'))
+                      open_demoDataset_ui(ns('demo_data'))
                       # )
                       # )
                     ),
@@ -192,28 +193,33 @@ mainapp_ui <- function(id){
               
               tabItem(tabName = "daparviz", 
                 tagList(
-                  h3("Dapar viz"),
-                  DaparViz::mod_view_dataset_ui(ns('daparviz'))
+                  #h3("Dapar viz"),
+                  DaparViz::view_dataset_ui(ns('daparviz'))
                 )
               ),
               
               
               tabItem(tabName = "export", h3("Export")), # export module not yet
-              tabItem(tabName = "globalSettings", h3('Global settings'),
-                mod_settings_ui('global_settings')),
-              tabItem(tabName = "releaseNotes", h3('Release notes'),
-                mod_release_notes_ui('rl')),
-              tabItem(tabName = "checkUpdates", h3('Check for updates'),
-                mod_check_updates_ui('check_updates')),
+              tabItem(tabName = "globalSettings", 
+                      h3('Global settings'),
+                      mod_settings_ui('global_settings')),
+              tabItem(tabName = "releaseNotes",
+                      h3('Release notes'),
+                      mod_release_notes_ui('rl')),
+              tabItem(tabName = "checkUpdates",
+                      h3('Check for updates'),
+                      mod_check_updates_ui('check_updates')),
               tabItem(tabName = "usefulLinks",
-                mod_insert_md_ui('links_MD')),
+                insert_md_ui('links_MD')),
               tabItem(tabName = "faq",
-                mod_insert_md_ui('FAQ_MD')),
-              tabItem(tabName = "bugReport", h3('Bug report'),
-                mod_bug_report_ui("bug_report")),
-              tabItem(tabName = "pipeline", h3('Pipeline'),
-                uiOutput('show_pipeline')
-              )
+                insert_md_ui('FAQ_MD')),
+              tabItem(tabName = "bugReport", 
+                      h3('Bug report'),
+                      mod_bug_report_ui("bug_report")),
+              tabItem(tabName = "pipeline",
+                      h3('Pipeline'),
+                      uiOutput('show_pipeline')
+                      )
             )
             # uiOutput('show_pipeline')
           )
@@ -336,33 +342,33 @@ mainapp_server <- function(id){
     #
     # Code for open demo dataset
     #
-    rv.core$result_openDemoDataset <- mod_open_demoDataset_server('demo_data')
-    observeEvent(rv.core$result_openDemoDataset(),{
-      rv.core$current.obj <- rv.core$result_openDemoDataset()
-      #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-      print('rv.core$current.obj has changed')
-    })
+    #rv.core$result_openDemoDataset <- open_demoDataset_server('demo_data')
+    #observeEvent(rv.core$result_openDemoDataset(),{
+    #  rv.core$current.obj <- rv.core$result_openDemoDataset()
+    #  #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+    #  print('rv.core$current.obj has changed')
+    #})
     
     
-    rv.core$result_openFile <- mod_open_dataset_server('open_file')
-    observeEvent(rv.core$result_openFile(),{
-      rv.core$current.obj <- rv.core$result_openFile()
+    #rv.core$result_openFile <- open_dataset_server('open_file')
+   # observeEvent(rv.core$result_openFile(),{
+    #  rv.core$current.obj <- rv.core$result_openFile()
       #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    })
+    #})
     # 
     
     
     #rv.core$result_convert <- Convert_server('Convert')
     
-     rv.core$result_convert <- nav_server(id = 'Convert',
-                                          dataIn = reactive({data.frame()}))
+     #rv.core$result_convert <- nav_server(id = 'Convert',
+     #                                     dataIn = reactive({data.frame()}))
      
      
-    observeEvent(rv.core$result_convert$dataOut()$trigger,{
+    #observeEvent(rv.core$result_convert$dataOut()$trigger,{
       #browser()
-      rv.core$dataIn <- rv.core$result_convert$dataOut()$value
+     # rv.core$dataIn <- rv.core$result_convert$dataOut()$value
       #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
-    })
+   # })
     
     # observe({
     #   #shinyjs::toggle('div_demoDataset', condition = !is.null(rv.core$pipeline.name()) && rv.core$pipeline.name() != 'None')
@@ -433,9 +439,10 @@ mainapp_server <- function(id){
     #   } 
     # })
     
-    
+    #browser()
     #---------------------------Server modules calls---------------------------------------------------#
-    DaparViz::mod_view_dataset_server('daparviz', reactive({rv.core$current.obj}))
+    DaparViz::view_dataset_server('daparviz', 
+                                      reactive({DaparViz::convert2Viz(rv.core$current.obj)}))
     
     #mod_test_server('tutu')
     mod_homepage_server('home')
@@ -443,11 +450,8 @@ mainapp_server <- function(id){
     #mod_release_notes_server("rl")
     #mod_check_updates_server("check_updates")
     #mod_insert_md_server("links_MD", URL_links)
-    mod_insert_md_server("FAQ_MD", URL_FAQ)
+    insert_md_server("FAQ_MD", URL_FAQ)
     #mod_bug_report_server("bug_report")
-    
-    
-    
   })
   
 }

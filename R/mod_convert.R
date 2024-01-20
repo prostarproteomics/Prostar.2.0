@@ -13,7 +13,7 @@ NULL
 #' @rdname mod_Convert
 #' @export
 #' 
-default_Convert_conf <- function(){
+Convert_conf <- function(){
   
 }
 
@@ -28,7 +28,7 @@ default_Convert_conf <- function(){
 #' @import shiny
 #' @return NA
 #'
-default_Convert_ui <- function(id) {
+Convert_ui <- function(id) {
   ns <- NS(id)
   h3(style="color: blue;", '-- Default convert module --')
 }
@@ -39,10 +39,12 @@ default_Convert_ui <- function(id) {
 #' @import shiny
 #' @rdname mod_Convert
 #'
-default_Convert_server <- function(id) {
+Convert_server <- function(id) {
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    
+    
   })
 
 }
@@ -51,14 +53,14 @@ default_Convert_server <- function(id) {
 
 #---------------------------------------------
 
-ui <- default_Convert_ui("qf_file")
-
-
-server <- function(input, output, session) {
-  default_Convert_server("qf_file")
-  
-}
-
-shinyApp(ui, server)
-
+# ui <- Convert_ui("qf_file")
+# 
+# 
+# server <- function(input, output, session) {
+#   Convert_server("qf_file")
+#   
+# }
+# 
+# shinyApp(ui, server)
+# 
 

@@ -43,7 +43,7 @@ NULL
 #' @rdname generic_mod_view_dataset
 #' @import shiny
 #' 
-default_mod_view_dataset_ui <- function(id){
+mod_view_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3(style="color: blue;", '-- Default view dataset module --')
@@ -56,7 +56,7 @@ default_mod_view_dataset_ui <- function(id){
 #' @export
 #' @importFrom shinyjs info
 #' 
-default_mod_view_dataset_server <- function(id, data){
+mod_view_dataset_server <- function(id, data){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -72,11 +72,11 @@ default_mod_view_dataset_server <- function(id, data){
 
 #----------------------------------------------------
 
-ui <- default_mod_view_dataset_ui("qf_file")
+ui <- mod_view_dataset_ui("qf_file")
 
 
 server <- function(input, output, session) {
-  default_mod_view_dataset_server("qf_file")
+  mod_view_dataset_server("qf_file")
   
 }
 

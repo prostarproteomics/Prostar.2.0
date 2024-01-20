@@ -1,4 +1,4 @@
-#' @title   mod_format_DT_ui and mod_format_DT_server
+#' @title   format_DT_ui and format_DT_server
 #'
 #' @description
 #'
@@ -19,7 +19,7 @@
 #' @param filename xxx
 #' @param hideCols xxx
 #'
-#' @name mod_format_DT
+#' @name format_DT
 #' 
 #' @return NA
 #' 
@@ -30,9 +30,9 @@ NULL
 #' @importFrom shiny NS tagList
 #'
 #' @export
-#' @rdname mod_format_DT
+#' @rdname format_DT
 #'
-mod_format_DT_ui <- function(id) {
+format_DT_ui <- function(id) {
   if (!requireNamespace("DT", quietly = TRUE)) {
     stop("Please install DT: BiocManager::install('DT')")
   }
@@ -53,8 +53,8 @@ mod_format_DT_ui <- function(id) {
 #' @export
 #'
 #' @importFrom htmlwidgets JS
-#' @rdname mod_format_DT
-mod_format_DT_server <- function(id,
+#' @rdname format_DT
+format_DT_server <- function(id,
                                  data){
   
   
@@ -95,10 +95,10 @@ mod_format_DT_server <- function(id,
 library(shiny)
 library(shinyjs)
 
-ui <- mod_format_DT_ui("dt")
+ui <- format_DT_ui("dt")
 
 server <- function(input, output, session) {
-  mod_format_DT_server("dt", data = reactive({iris}) )
+  format_DT_server("dt", data = reactive({iris}) )
 }
 
 shinyApp(ui = ui, server = server)

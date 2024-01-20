@@ -41,7 +41,7 @@ NULL
 #' @rdname generic_mod_open_dataset
 #' @import shiny
 #' 
-default_mod_open_dataset_ui <- function(id){
+open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3(style="color: blue;", '-- Default open dataset module --')
@@ -54,7 +54,7 @@ default_mod_open_dataset_ui <- function(id){
 #' @export
 #' @importFrom shinyjs info
 #' 
-default_mod_open_dataset_server <- function(id){
+open_dataset_server <- function(id){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -75,11 +75,11 @@ default_mod_open_dataset_server <- function(id){
 
 #----------------------------------------------------
 
-ui <- default_mod_open_dataset_ui("qf_file")
+ui <- open_dataset_ui("qf_file")
 
 
 server <- function(input, output, session) {
-  default_mod_open_dataset_server("qf_file")
+  open_dataset_server("qf_file")
 
 }
 

@@ -20,10 +20,10 @@ shinyUI(
             functions = c("resetProstar")),
         
         #theme = "css/ceruleanProstar.css",
-        theme = shinythemes::shinytheme("cerulean"),
+        #theme = shinythemes::shinytheme("cerulean"),
         
         titlePanel("", windowTitle = "Prostar"),
-        #div(id = 'div_loadapp_module', loadapp_ui('loadapp_module')),
+        div(id = 'div_loadapp_module', loadapp_ui('loadapp_module')),
         hidden(div(id = 'div_mainapp_module', mainapp_ui('mainapp_module')))
 
         
