@@ -355,7 +355,6 @@ mainapp_server <- function(id,
     
     output$open_convert_dataset_UI <- renderUI({
       req(funcs)
-      #browser()
       call.func(
         fname = paste0(funcs$convert, '_ui'),
         args = list(id = ns('Convert')))
