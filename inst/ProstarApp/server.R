@@ -18,18 +18,19 @@ shinyServer(
   
     function(input, output, session ) {
       
-    done <- loadapp_server('loadapp_module', funcs = funcs)
+    loaded_funcs <- loadapp_server('loadapp_module', funcs = funcs)
       
-      observeEvent(req(done()), {
+      observeEvent(req(loaded_funcs()), {
        # observe({
       # Once the server part is loaded, hide the loading page 
-      # and show th main content
+      # and show the main content
         
-      #  browser()
+        browser()
       #shinyjs::hide('div_loadapp_module', anim = TRUE, animType = "fade", time=3)
       shinyjs::show('div_mainapp_module', anim = TRUE, animType = "fade", time=3)
       
-      mainapp_server('mainapp_module')
+      mainapp_server('mainapp_module',
+                     funcs = loaded_funcs())
       })
 
  

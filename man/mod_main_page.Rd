@@ -8,7 +8,7 @@
 \usage{
 mainapp_ui(id)
 
-mainapp_server(id)
+mainapp_server(id, funcs = NULL)
 }
 \arguments{
 \item{id}{xxx}

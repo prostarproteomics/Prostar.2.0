@@ -35,13 +35,15 @@ NULL
 #'
 #' @keywords internal
 #' @export 
-#' @importFrom shiny NS tagList
-#' @importFrom shinyjs inlineCSS
+#' @import shiny
+#' @import shinyjs
+#' @import shinydashboard
+#' @import MagellanNTK
+#' 
 mainapp_ui <- function(id){
   ns <- NS(id)
   
-  div(
-      id = "header",
+  div(id = "header",
     
       shinydashboard::dashboardPage(
         #skin="blue",
@@ -92,10 +94,15 @@ mainapp_ui <- function(id){
           tags$li(class="dropdown", actionButton('browser', 'Console')),
           # links Prostar website and github
           tags$li(class="dropdown",
-            a(href="http://www.prostar-proteomics.org/",
-              img(src="www/images/LogoProstarComplet.png",
-                title="Prostar website",
-                height="17px"))),
+            a(href="http://www.prostar-proteomics.org/"
+              # img(src=base64enc::dataURI(
+              #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
+              #   mime="image/png"))
+              )
+            ),
+                # img(src="www/images/LogoProstarComplet.png",
+                # title="Prostar website",
+                # height="17px"))),
           tags$li(class="dropdown",
             a(href="https://github.com/samWieczorek/Prostar2",
               icon("github"),
@@ -111,32 +118,32 @@ mainapp_ui <- function(id){
             tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
             # Menus and submenus in sidebar
             br(),
-            menuItem("Home", 
+            shinydashboard::menuItem("Home", 
                      tabName = "ProstarHome", 
                      icon = icon("home"),
                      selected = TRUE),
             hr(),
-            menuItem("Data Manager", 
+            shinydashboard::menuItem("Data Manager", 
               icon = icon("folder"), 
               startExpanded = TRUE,
-              menuSubItem("Open QFeature file", tabName = "openFile"),
-              menuSubItem("Convert Data", tabName = "convert"),
-              menuSubItem("Demo data", tabName = "demoData"),
-              menuSubItem("Export Results", tabName = "export")
+              shinydashboard::menuSubItem("Open QFeature file", tabName = "openFile"),
+              shinydashboard::menuSubItem("Convert Data", tabName = "convert"),
+              shinydashboard::menuSubItem("Demo data", tabName = "demoData"),
+              shinydashboard::menuSubItem("Export Results", tabName = "export")
             ),
             hr(),
-            menuItem("Pipeline", tabName = "pipeline", icon = icon("cogs")),
+            shinydashboard::menuItem("Pipeline", tabName = "pipeline", icon = icon("cogs")),
             hr(),
-            menuItem("Dapar Viz", tabName = "daparviz", icon = icon("cogs")),
+            shinydashboard::menuItem("Dapar Viz", tabName = "daparviz", icon = icon("cogs")),
             hr(),
-            menuItem("Help", 
+            shinydashboard::menuItem("Help", 
               icon = icon("question-circle"),
-              menuSubItem("Useful Links", tabName = "usefulLinks"),
-              menuSubItem("FAQ", tabName = "faq"),
-              menuSubItem("Bug Report", tabName = "bugReport"),
-              menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
-              menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
-              menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
+              shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
+              shinydashboard::menuSubItem("FAQ", tabName = "faq"),
+              shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
+              shinydashboard::menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
+              shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
+              shinydashboard:: menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
             )
           )
         ),
@@ -152,7 +159,7 @@ mainapp_ui <- function(id){
               tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
             ),
             
-            useShinyjs(),
+            shinyjs::useShinyjs(),
             
             # body content
             tabItems(
@@ -160,7 +167,7 @@ mainapp_ui <- function(id){
                 mod_homepage_ui(ns('home'))
               ),
               tabItem(tabName = "openFile", h3("Open QFeature file"),
-                       open_dataset_ui("open_file")),
+                      uiOutput(ns('open_dataset_UI'))),
               tabItem(tabName = "convert", 
                 tagList(
                   h3("Convert datas"),
@@ -179,7 +186,7 @@ mainapp_ui <- function(id){
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      open_demoDataset_ui(ns('demo_data'))
+                      uiOutput(ns('demo_dataset_UI'))
                       # )
                       # )
                     ),
@@ -193,8 +200,7 @@ mainapp_ui <- function(id){
               
               tabItem(tabName = "daparviz", 
                 tagList(
-                  #h3("Dapar viz"),
-                  DaparViz::view_dataset_ui(ns('daparviz'))
+                  uiOutput(ns('EDA_UI'))
                 )
               ),
               
@@ -202,10 +208,10 @@ mainapp_ui <- function(id){
               tabItem(tabName = "export", h3("Export")), # export module not yet
               tabItem(tabName = "globalSettings", 
                       h3('Global settings'),
-                      mod_settings_ui('global_settings')),
+                      mod_settings_ui(ns('global_settings'))),
               tabItem(tabName = "releaseNotes",
                       h3('Release notes'),
-                      mod_release_notes_ui('rl')),
+                      mod_release_notes_ui(ns('rl'))),
               tabItem(tabName = "checkUpdates",
                       h3('Check for updates'),
                       mod_check_updates_ui('check_updates')),
@@ -288,7 +294,10 @@ mainapp_ui <- function(id){
 #' @rdname mod_main_page
 #' @export
 #' @keywords internal
-mainapp_server <- function(id){
+#' @import shinydashboard
+#' @import MagellanNTK
+mainapp_server <- function(id,
+                           funcs = NULL){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -299,7 +308,7 @@ mainapp_server <- function(id){
       dataIn = NULL,
       result_convert = NULL,
       result_openDemoDataset = NULL,
-      
+      result_open_dataset = NULL,
       # Current QFeatures object in Prostar
       current.obj = NULL,
       
@@ -342,19 +351,63 @@ mainapp_server <- function(id){
     #
     # Code for open demo dataset
     #
-    #rv.core$result_openDemoDataset <- open_demoDataset_server('demo_data')
-    #observeEvent(rv.core$result_openDemoDataset(),{
-    #  rv.core$current.obj <- rv.core$result_openDemoDataset()
-    #  #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    #  print('rv.core$current.obj has changed')
-    #})
+    output$demo_dataset_UI <- renderUI({
+      req(funcs)
+      # rv.core$result_openDemoDataset <- do.call(
+      #   eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
+      #   args = list(id = ns('demo_data')))
+      
+      rv.core$current.obj <- do.call(
+        eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
+        args = list(id = ns('demo_data')))
+      
+      do.call(
+        eval(parse(text=paste0(funcs$open_demoDataset, '_ui'))),
+             args = list(id = ns('demo_data')))
+      
+      
+      
+      })
+    #browser()
+    
+    # observe({
+    #   req(funcs)
+    #   rv.core$current.obj <- do.call(
+    #     eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
+    #     args = list(id = ns('demo_data')))
+    #   #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+    #   print('rv.core$current.obj has changed')
+    # })
+     
     
     
+     #
+     # Code for open dataset
+     #
+    # observe({
+       rv.core$result_open_dataset <- do.call(
+         eval(parse(text=paste0(funcs$open_dataset, '_server'))),
+         args = list(id = 'open_dataset'))
+       
+       
+     #  })
+     
+     output$open_dataset_UI <- renderUI({
+       req(funcs)
+       
+       do.call(
+         eval(parse(text=paste0(funcs$open_dataset, '_ui'))),
+         args = list(id = ns('open_dataset')))
+       
+     })
+
+     
     #rv.core$result_openFile <- open_dataset_server('open_file')
-   # observeEvent(rv.core$result_openFile(),{
-    #  rv.core$current.obj <- rv.core$result_openFile()
-      #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    #})
+    observeEvent(req(rv.core$result_open_dataset()),{
+     rv.core$current.obj <- rv.core$result_open_dataset()
+     print(rv.core$current.obj)
+   # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+    })
     # 
     
     
@@ -440,9 +493,25 @@ mainapp_server <- function(id){
     # })
     
     #browser()
+    
+    observe({
+      req(rv.core$current.obj)
+      
+      do.call(
+        eval(parse(text=paste0(funcs$view_dataset, '_server'))),
+        args = list(id = 'view_dataset',
+                    obj = reactive({DaparViz::convert2Viz(rv.core$current.obj)})))
+    })
+    
     #---------------------------Server modules calls---------------------------------------------------#
-    DaparViz::view_dataset_server('daparviz', 
-                                      reactive({DaparViz::convert2Viz(rv.core$current.obj)}))
+    output$EDA_UI <- renderUI({
+      req(funcs)
+      
+      do.call(
+        eval(parse(text=paste0(funcs$view_dataset, '_ui'))),
+        args = list(id = ns('view_dataset')))
+    })
+    
     
     #mod_test_server('tutu')
     mod_homepage_server('home')
@@ -455,3 +524,26 @@ mainapp_server <- function(id){
   })
   
 }
+
+
+
+
+
+#___________________________________________________________
+ui <- fluidPage(
+  mainapp_ui("main")
+)
+
+server <- function(input, output, session) {
+  funcs <- list(Convert = "DaparToolshed::Convert",
+                open_dataset = "DaparToolshed::open_dataset",
+                open_demoDataset = "DaparToolshed::open_demoDataset",
+                view_dataset = "DaparViz::view_dataset"
+  )
+  
+  mainapp_server("main", funcs = funcs)
+}
+
+shinyApp(ui, server)
+
+

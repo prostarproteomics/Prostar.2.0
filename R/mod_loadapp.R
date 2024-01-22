@@ -151,21 +151,21 @@ loadapp_server <- function(id,
     
     observeEvent(input$load_pkg, {
       
-      browser()
-      # source(file.path(".", "mod_mainapp.R"), local = TRUE)$value
+      #browser()
+      # source(system.file("ProstarApp/mod_mainapp.R", package = 'Prostar.2.0'), local = TRUE)$value
       
       
-      # source(file.path(".", "mod_homepage.R"), local = TRUE)$value
+       #source(system.file("ProstarApp/mod_homepage.R", package = 'Prostar.2.0'), local = TRUE)$value
+      #(system.file("ProstarApp/mod_insert_md.R", package = 'Prostar.2.0'), local = TRUE)$value
       # source(file.path(".", "mod_choose_pipeline.R"), local = TRUE)$value
-      # source(file.path(".", "mod_release_notes.R"), local = TRUE)$value
-      # source(file.path(".", "mod_check_updates.R"), local = TRUE)$value
-      # source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
+       #source(file.path(".", "mod_release_notes.R"), local = TRUE)$value
+       #source(file.path(".", "mod_check_updates.R"), local = TRUE)$value
+       #source(file.path(".", "mod_bug_report.R"), local = TRUE)$value
       # source(file.path(".", "mod_test.R"), local = TRUE)$value
-      # source(file.path(".", "mod_settings.R"), local = TRUE)$value
+       #source(system.file("ProstarApp/mod_settings.R", package = 'Prostar.2.0'), local = TRUE)$value
       dataOut$files.sourced <- TRUE
       
-      
-      rv$dataOut <- reactiveValuesToList(input)
+      rv$dataOut <- reactiveValuesToList(input)[funcs]
       
     })
     
@@ -175,9 +175,9 @@ loadapp_server <- function(id,
   })
   
 }
-
-
-
+#' 
+#' 
+#' 
 progressBar_css <- ".progress {
   position: relative;
   height: 4px;
@@ -188,8 +188,8 @@ progressBar_css <- ".progress {
   background-clip: padding-box;
   margin: 0.5rem 0 1rem 0;
   overflow: hidden; }
-  
-  
+
+
 .progress .determinate {
     position: absolute;
     background-color: inherit;
@@ -197,7 +197,7 @@ progressBar_css <- ".progress {
     bottom: 0;
     background-color: #E87352;
     transition: width .3s linear; }
-    
+
 .progress .indeterminate {
     background-color: blue; }
     .progress .indeterminate:before {
@@ -210,7 +210,7 @@ progressBar_css <- ".progress {
       will-change: left, right;
       -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
               animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
-    
+
 .progress .indeterminate:after {
       content: '';
       position: absolute;

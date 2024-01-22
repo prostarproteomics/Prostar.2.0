@@ -22,6 +22,29 @@ Depends: R (>= 4.2.2)
 Suggests: BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass
 Imports: shinydashboardPlus, shiny, shinydashboard
+Collate:
+    global.R
+    mod_insert_md.R
+    mod_homepage.R
+    mod_bsmodal.R
+    mod_view_dataset.R
+    default_mod_view_dataset.R
+    mod_check_updates.R
+    mod_error_modal.R
+    mod_bug_report.R
+    mod_download.R
+    mod_download_btns.R
+    mod_format_DT.R
+    mod_navbar_menu.R
+    mod_open_dataset.R
+    mod_popover_for_help.R
+    mod_release_notes.R
+    mod_settings.R
+    open_demoDataset.R
+    utils_Prostar.R
+    prostar.R
+    mod_loadapp.R
+    mod_mainapp.R
 NeedsCompilation: no
 RoxygenNote: 7.3.0
 Packaged: 2017-10-13 06:25:55 UTC; sw175264

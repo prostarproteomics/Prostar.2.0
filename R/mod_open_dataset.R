@@ -4,7 +4,7 @@
 #' 
 #' @param id xxx
 #' 
-#' @name generic_mod_open_dataset
+#' @name mod_open_dataset
 #'
 #' @keywords internal
 #' 
@@ -38,7 +38,7 @@ NULL
 
 
 #' @export 
-#' @rdname generic_mod_open_dataset
+#' @rdname mod_open_dataset
 #' @import shiny
 #' 
 open_dataset_ui <- function(id){
@@ -49,7 +49,7 @@ open_dataset_ui <- function(id){
 }
 
 
-#' @rdname generic_mod_open_dataset
+#' @rdname mod_open_dataset
 #' 
 #' @export
 #' @importFrom shinyjs info

@@ -19,14 +19,6 @@ mod_homepage_ui <- function(id){
   tagList(
     uiOutput(ns("citationText")),
     tags$hr(),
-    # tags$div(
-    #   style="padding: 0 50px; float: left;",
-    #   img(src=base64enc::dataURI(file=system.file('ProstarApp/www/images', 
-    #                                               'LogoProstarComplet.png', package='ProstarDev'), 
-    #                              mime="image/png"), 
-    #       width='150px', 
-    #       height='150px')
-    # ),
     tags$div(style="margin-top: 50px;",
              tags$p("")
              ),
@@ -123,9 +115,18 @@ mod_homepage_server <- function(id){
   
 }
     
-## To be copied in the UI
-# mod_homepage_ui("homepage_ui_1")
-    
-## To be copied in the server
-# callModule(mod_homepage_server, "homepage_ui_1")
- 
+
+
+
+#___________________________________________________________
+ui <- fluidPage(
+    mod_homepage_ui("mod_pkg")
+)
+
+server <- function(input, output, session) {
+  
+  mod_homepage_server("mod_pkg")
+
+}
+
+shinyApp(ui, server)
