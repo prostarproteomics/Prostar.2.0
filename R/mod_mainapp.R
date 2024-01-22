@@ -186,7 +186,7 @@ mainapp_ui <- function(id){
                       style="display:inline-block; vertical-align: middle; padding-right: 20px;",
                       #shinyjs::hidden(
                       # div(id='div_demoDataset',
-                      uiOutput(ns('demo_dataset_UI'))
+                      uiOutput(ns('open_demo_dataset_UI'))
                       # )
                       # )
                     ),
@@ -351,23 +351,25 @@ mainapp_server <- function(id,
     #
     # Code for open demo dataset
     #
-    output$demo_dataset_UI <- renderUI({
+    #
+    # Code for open dataset
+    #
+    rv.core$result_demo_dataset <- do.call(
+      eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
+      args = list(id = 'open_demo_dataset'))
+    
+    output$open_demo_dataset_UI <- renderUI({
       req(funcs)
-      # rv.core$result_openDemoDataset <- do.call(
-      #   eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
-      #   args = list(id = ns('demo_data')))
-      
-      rv.core$current.obj <- do.call(
-        eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
-        args = list(id = ns('demo_data')))
-      
       do.call(
         eval(parse(text=paste0(funcs$open_demoDataset, '_ui'))),
-             args = list(id = ns('demo_data')))
-      
-      
-      
-      })
+        args = list(id = ns('open_demo_dataset')))
+    })
+    
+    observeEvent(req(rv.core$result_demo_dataset()),{
+      rv.core$current.obj <- rv.core$result_demo_dataset()
+      print(rv.core$current.obj)
+      # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+    })
     #browser()
     
     # observe({
@@ -384,31 +386,22 @@ mainapp_server <- function(id,
      #
      # Code for open dataset
      #
-    # observe({
-       rv.core$result_open_dataset <- do.call(
+    rv.core$result_open_dataset <- do.call(
          eval(parse(text=paste0(funcs$open_dataset, '_server'))),
          args = list(id = 'open_dataset'))
-       
-       
-     #  })
-     
+
      output$open_dataset_UI <- renderUI({
        req(funcs)
-       
        do.call(
          eval(parse(text=paste0(funcs$open_dataset, '_ui'))),
          args = list(id = ns('open_dataset')))
-       
      })
 
-     
-    #rv.core$result_openFile <- open_dataset_server('open_file')
     observeEvent(req(rv.core$result_open_dataset()),{
      rv.core$current.obj <- rv.core$result_open_dataset()
      print(rv.core$current.obj)
    # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
     })
-    # 
     
     
     #rv.core$result_convert <- Convert_server('Convert')
@@ -494,19 +487,15 @@ mainapp_server <- function(id,
     
     #browser()
     
-    observe({
-      req(rv.core$current.obj)
-      
+
       do.call(
         eval(parse(text=paste0(funcs$view_dataset, '_server'))),
         args = list(id = 'view_dataset',
                     obj = reactive({DaparViz::convert2Viz(rv.core$current.obj)})))
-    })
     
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(funcs)
-      
       do.call(
         eval(parse(text=paste0(funcs$view_dataset, '_ui'))),
         args = list(id = ns('view_dataset')))
