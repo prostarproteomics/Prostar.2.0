@@ -361,11 +361,11 @@ mainapp_server <- function(id,
         args = list(id = ns('Convert')))
     })
     
-    # observeEvent(req(rv.core$result_convert_dataset()),{
-    #   rv.core$current.obj <- rv.core$result_convert_dataset()
-    #   print(rv.core$current.obj)
+     observeEvent(req(rv.core$result_convert_dataset()),{
+       rv.core$current.obj <- rv.core$result_convert_dataset()
+       print(rv.core$current.obj)
     #   # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    # })
+     })
     
     
     #
