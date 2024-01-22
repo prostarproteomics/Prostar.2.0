@@ -1,4 +1,8 @@
-
+#' @export
+call.func <- function(fname,
+                      args){
+  do.call(eval(parse(text=fname)), args)
+}
 
 # function to read DT inputs
 #' @export

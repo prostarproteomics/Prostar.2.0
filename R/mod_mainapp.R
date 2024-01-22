@@ -171,7 +171,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "convert", 
                 tagList(
                   h3("Convert datas"),
-                  nav_ui(ns('Convert'))
+                  uiOutput(ns('open_convert_dataset_UI'))
                 )
               ),
               tabItem(tabName = "demoData", 
@@ -347,6 +347,26 @@ mainapp_server <- function(id,
     # shinyjs::delay(1000, rv.core$current.obj <- NA)
     # 
     
+    # Code for open dataset
+    #
+    rv.core$result_convert_dataset <- call.func(
+      fname = paste0(funcs$convert, '_server'),
+      args = list(id = 'Convert'))
+    
+    output$open_convert_dataset_UI <- renderUI({
+      req(funcs)
+      #browser()
+      call.func(
+        fname = paste0(funcs$convert, '_ui'),
+        args = list(id = ns('Convert')))
+    })
+    
+    # observeEvent(req(rv.core$result_convert_dataset()),{
+    #   rv.core$current.obj <- rv.core$result_convert_dataset()
+    #   print(rv.core$current.obj)
+    #   # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+    # })
+    
     
     #
     # Code for open demo dataset
@@ -354,14 +374,14 @@ mainapp_server <- function(id,
     #
     # Code for open dataset
     #
-    rv.core$result_demo_dataset <- do.call(
-      eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
+    rv.core$result_demo_dataset <- call.func(
+      fname = paste0(funcs$open_demoDataset, '_server'),
       args = list(id = 'open_demo_dataset'))
     
     output$open_demo_dataset_UI <- renderUI({
       req(funcs)
-      do.call(
-        eval(parse(text=paste0(funcs$open_demoDataset, '_ui'))),
+      call.func(
+        fname = paste0(funcs$open_demoDataset, '_ui'),
         args = list(id = ns('open_demo_dataset')))
     })
     
@@ -370,7 +390,6 @@ mainapp_server <- function(id,
       print(rv.core$current.obj)
       # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
     })
-    #browser()
     
     # observe({
     #   req(funcs)
@@ -386,15 +405,14 @@ mainapp_server <- function(id,
      #
      # Code for open dataset
      #
-    rv.core$result_open_dataset <- do.call(
-         eval(parse(text=paste0(funcs$open_dataset, '_server'))),
-         args = list(id = 'open_dataset'))
+    rv.core$result_open_dataset <- call.func(
+      fname = paste0(funcs$open_dataset, '_server'),
+      args = list(id = 'open_dataset'))
 
      output$open_dataset_UI <- renderUI({
        req(funcs)
-       do.call(
-         eval(parse(text=paste0(funcs$open_dataset, '_ui'))),
-         args = list(id = ns('open_dataset')))
+       call.func(fname = paste0(funcs$open_dataset, '_ui'),
+                 args = list(id = ns('open_dataset')))
      })
 
     observeEvent(req(rv.core$result_open_dataset()),{
@@ -488,16 +506,16 @@ mainapp_server <- function(id,
     #browser()
     
 
-      do.call(
-        eval(parse(text=paste0(funcs$view_dataset, '_server'))),
+      call.func(
+        fname = paste0(funcs$view_dataset, '_server'),
         args = list(id = 'view_dataset',
                     obj = reactive({DaparViz::convert2Viz(rv.core$current.obj)})))
     
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(funcs)
-      do.call(
-        eval(parse(text=paste0(funcs$view_dataset, '_ui'))),
+      call.func(
+        fname = paste0(funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))
     })
     
@@ -524,7 +542,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  funcs <- list(Convert = "DaparToolshed::Convert",
+  funcs <- list(convert = "DaparToolshed::convert",
                 open_dataset = "DaparToolshed::open_dataset",
                 open_demoDataset = "DaparToolshed::open_demoDataset",
                 view_dataset = "DaparViz::view_dataset"
