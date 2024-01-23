@@ -55,7 +55,7 @@ format_DT_ui <- function(id) {
 #' @importFrom htmlwidgets JS
 #' @rdname format_DT
 format_DT_server <- function(id,
-                                 data){
+                             data){
   
   
   moduleServer(id, function(input, output, session){
@@ -73,7 +73,7 @@ format_DT_server <- function(id,
       req(length(data()) > 0)
       dt <- DT::datatable(
         data(), 
-        escape = FALSE,
+        escape = TRUE,
         options = list(
           #initComplete = initComplete(),
           dom = 'Bt',

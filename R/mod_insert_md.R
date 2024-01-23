@@ -15,7 +15,6 @@
 insert_md_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default insert markdown module --'),
     uiOutput(ns('openURLButton_UI')),
     htmlOutput(ns("insertMD"))
   )
@@ -25,9 +24,9 @@ insert_md_ui <- function(id){
 
 #' @rdname mod_insert_md
 #' @export
-insert_md_server <- function(id, 
-                                 url,
-                                 link_URL = NULL){
+insert_md_server <- function(id,
+                             url,
+                             link_URL = NULL){
   
   
   moduleServer(id, function(input, output, session){
@@ -48,7 +47,6 @@ insert_md_server <- function(id,
       tryCatch(
         {
           includeMarkdown(readLines(url))
-          
         }
         , warning = function(w) {
           tags$p("URL not found<br>",conditionMessage(w))

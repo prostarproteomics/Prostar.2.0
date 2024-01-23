@@ -1,4 +1,18 @@
-# Module UI
+
+#' @export
+GetOnlineZipVersion <- function(){
+  
+  thepage <- readLines('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/')
+  substr(thepage[12], regexpr("Prostar_",thepage[12])[1], 2+regexpr("zip",thepage[12])[1])
+  
+  
+  thetable <- XML::readHTMLTable('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/', stringsAsFactors=FALSE)
+  onlineZipVersion <- thetable[[1]]$Name[3]
+  
+  return(onlineZipVersion)
+}
+
+
 
 #' @title   mod_check_updates_ui and mod_check_updates_server
 #' @description  A shiny Module.
@@ -35,6 +49,7 @@ mod_check_updates_ui <- function(id){
 #' @importFrom utils compareVersion
 mod_check_updates_server <- function(id){
   
+  DAPAR.loc <- DAPARdata.loc <- Prostar.loc <- NULL
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -42,7 +57,7 @@ mod_check_updates_server <- function(id){
     output$baseVersions <- renderUI({
       
       tagList(
-        tags$p("Prostar is running on ",R.version.string, style="font-size: 16px"),
+        tags$p("Prostar is running on ", R.version.string, style="font-size: 16px"),
         tags$p(paste0("and uses the Bioconductor Release ",as.character(BiocManager::version())), style="font-size: 16px"),
         tags$br()
       )
@@ -50,8 +65,7 @@ mod_check_updates_server <- function(id){
     })
     
     format_DT_server('tab_versions',
-                         table2show=reactive({getPackagesVersions()}),
-                         style = reactive({NULL}))
+                     data = reactive({getPackagesVersions()}))
     
     output$infoForNewVersions <- renderUI({
       df <- getPackagesVersions()
@@ -63,7 +77,8 @@ mod_check_updates_server <- function(id){
           
           zipVersion <- substr(GetOnlineZipVersion(), 9, regexpr(".zip",GetOnlineZipVersion())[1] -1),
           prostarVersion <- installed.packages(lib.loc=Prostar.loc)["Prostar","Version"],
-          if (compareVersion(zipVersion,prostarVersion) == 1){
+          #browser(),
+          if (compareVersion(zipVersion, prostarVersion) == 1){
             p(style="font-size: 16px", "If you use the Zero-install version, please download the latest zip file on our website ",
               tags$a("(www.prostar-proteomics.org)", href="http://www.prostar-proteomics.org", target="_blank")
             )
@@ -190,9 +205,14 @@ mod_check_updates_server <- function(id){
   
 }
 
-## To be copied in the UI
-# mod_check_updates_ui("check_updates_ui_1")
 
-## To be copied in the server
-# callModule(mod_check_updates_server, "check_updates_ui_1")
+library(shiny)
+library(shinyjs)
 
+ui <- mod_check_updates_ui("update")
+
+server <- function(input, output, session) {
+  mod_check_updates_server("update")
+}
+
+shinyApp(ui = ui, server = server)

@@ -87,18 +87,7 @@ Compute_PCA_nbDimensions <- shiny::reactive({
 
 
 
-#' @export
-GetOnlineZipVersion <- function(){
-  
-  thepage <- readLines('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/')
-  substr(thepage[12], regexpr("Prostar_",thepage[12])[1], 2+regexpr("zip",thepage[12])[1])
-  
-  
-  thetable <- XML::readHTMLTable('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/', stringsAsFactors=FALSE)
-  onlineZipVersion <- thetable[[1]]$Name[3]
-  
-  return(onlineZipVersion)
-}
+
 
 
 

@@ -214,17 +214,17 @@ mainapp_ui <- function(id){
                       mod_release_notes_ui(ns('rl'))),
               tabItem(tabName = "checkUpdates",
                       h3('Check for updates'),
-                      mod_check_updates_ui('check_updates')),
+                      mod_check_updates_ui(ns('check_updates'))),
               tabItem(tabName = "usefulLinks",
-                insert_md_ui('links_MD')),
+                insert_md_ui(ns('links_MD'))),
               tabItem(tabName = "faq",
-                insert_md_ui('FAQ_MD')),
+                insert_md_ui(ns('FAQ_MD'))),
               tabItem(tabName = "bugReport", 
                       h3('Bug report'),
-                      mod_bug_report_ui("bug_report")),
+                      mod_bug_report_ui(ns("bug_report"))),
               tabItem(tabName = "pipeline",
                       h3('Pipeline'),
-                      uiOutput('show_pipeline')
+                      uiOutput(ns('show_pipeline'))
                       )
             )
             # uiOutput('show_pipeline')
@@ -339,16 +339,6 @@ mainapp_server <- function(id,
     #
     # Code for convert tool
     #
-    # convert = Convert$new('convertTool')
-    # ## Get the return values of modules in charge of loading datasets
-    # observe({
-    #   rv.core$result_convert <- convert$server(dataIn = reactive({rv.core$current.obj}))
-    #   })
-    # shinyjs::delay(1000, rv.core$current.obj <- NA)
-    # 
-    
-    # Code for open dataset
-    #
     rv.core$result_convert_dataset <- call.func(
       fname = paste0(funcs$convert, '_server'),
       args = list(id = 'Convert'))
@@ -362,16 +352,13 @@ mainapp_server <- function(id,
     
      observeEvent(req(rv.core$result_convert_dataset()),{
        rv.core$current.obj <- rv.core$result_convert_dataset()
-       print(rv.core$current.obj)
-    #   # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+       
+        #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
      })
     
     
     #
     # Code for open demo dataset
-    #
-    #
-    # Code for open dataset
     #
     rv.core$result_demo_dataset <- call.func(
       fname = paste0(funcs$open_demoDataset, '_server'),
@@ -522,10 +509,13 @@ mainapp_server <- function(id,
     #mod_test_server('tutu')
     mod_homepage_server('home')
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
-    #mod_release_notes_server("rl")
-    #mod_check_updates_server("check_updates")
-    #mod_insert_md_server("links_MD", URL_links)
-    insert_md_server("FAQ_MD", URL_FAQ)
+  mod_release_notes_server("rl")
+    mod_check_updates_server("check_updates")
+    insert_md_server("links_MD", 
+                         URL_links)
+    insert_md_server("FAQ_MD", 
+                     URL_FAQ,
+                     link_URL = 'https://www.prostar-proteomics.org/#Frequently_asked_questions')
     #mod_bug_report_server("bug_report")
   })
   
