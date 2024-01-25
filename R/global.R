@@ -9,7 +9,7 @@ library(MagellanNTK)
 #source(file.path(".", "mod_load_package.R"), local = TRUE)$value
 #source(file.path(".", "mod_loadapp.R"), local = TRUE)$value
 #source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
-funcs <- c('Convert', 
+funcs <- c('convert', 
            'open_dataset', 
            'open_demoDataset',
            'view_dataset')

@@ -272,10 +272,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  funcs <- c('Convert', 
+  funcs <- c('convert', 
              'open_dataset', 
              'open_demoDataset',
-             'view_dataset')
+             'view_dataset',
+             'infos_dataset')
   
   done <- loadapp_server("mod_pkg", funcs = funcs)
   #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')

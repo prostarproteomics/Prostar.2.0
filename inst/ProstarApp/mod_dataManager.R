@@ -19,38 +19,21 @@
 #' @importFrom shiny NS tagList 
 #' @import shinyjs
 #' 
-mod_dataManager_ui <- function(id){
+dataManager_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
-    radioButtons(ns("dmUI"), "Choose one:",
-                 choiceNames = list(
-                   h4('Import file'),
-                   HTML("<p style='color:red;'>Convert file</p>"),
-                   "Open demo dataset"
-                 ),
-                 choiceValues = list(
-                   "importFile", "convertFile", "openDemo"
-                 )),
+    selectInput(ns("dmUI"), "Choose one:",
+                 choices = c('convert' = 'convert',
+                             'open' = 'open',
+                             'demo' = 'demo'),
+                width = '150px'),
     
-    shinyjs::hidden(
-      div(id=ns('mod_demo'),
-          mod_open_demoDataset_ui(ns('rl'))
-          )
-      ),
-    shinyjs::hidden(
-      div(id=ns('mod_convert'),
-          uiOutput(ns('show_convert'))
-          )
-    ),
-    shinyjs::hidden(
-      div(id=ns('modChoosePipeline'),
-          choose_pipeline_ui(ns('pipe'))
-      )
-    ),
-    actionButton(ns('send'), 'Send'),
-  hr(),
-    mod_infos_dataset_ui(ns("infos"))
+    uiOutput(ns('open_demo_dataset_UI')),
+    uiOutput(ns('open_convert_dataset_UI')),
+    uiOutput(ns('open_dataset_UI')),
+    hr(),
+    infos_dataset_ui(ns("infos"))
     )
 }
 
@@ -70,65 +53,121 @@ mod_dataManager_ui <- function(id){
 #' @import QFeatures
 #' @import DaparViz
 #' 
-mod_dataManager_server <- function(id){
+dataManager_server <- function(id, funcs){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
     
     rv.dm <- reactiveValues(
-      dataType = NULL,
-      pipeline = NULL,
-      dataIn = NULL,
       dataOut = NULL
     )
-    
-    mod_infos_dataset_server('infos', 
-                             obj = reactive({rv.dm$dataIn})
-    )
-    
-    rv.dm$demoData <- mod_open_demoDataset_server("rl")
-    convert <- Convert$new(ns('convData'))
-    rv.dm$convertData <- convert$server(dataIn = reactive({NULL}))
-    
-    
-    rv.dm$pipeline <- choose_pipeline_server('pipe',
-                                                 dataType = 'protein',
-                                                 package = 'MSPipelines')
 
-    output$show_convert <- renderUI({
-      req(convert)
-      convert$ui()
+   call.func(
+     fname = paste0(funcs$infos_dataset, '_server'),
+     args = list(id = 'infos',
+                 obj = reactive({rv.dm$dataOut}))
+   )
+   
+   output$infos_dataset_UI <- renderUI({
+     req(funcs)
+     req(rv.dm$dataOut)
+     call.func(
+       fname = paste0(funcs$infos_dataset, '_ui'),
+       args = list(id = ns('infos')))
+   })
+   
+   
+    #browser()
+    #
+    # Code for convert tool
+    #
+    rv.dm$result_convert_dataset <- call.func(
+      fname = paste0(funcs$convert, '_server'),
+      args = list(id = 'Convert'))
+    
+    output$open_convert_dataset_UI <- renderUI({
+      req(funcs)
+      req(input$dmUI == 'convert')
+      call.func(
+        fname = paste0(funcs$convert, '_ui'),
+        args = list(id = ns('Convert')))
     })
     
+    observeEvent(req(rv.dm$result_convert_dataset()),{
+      rv.dm$dataOut <- rv.dm$result_convert_dataset()
+       })
     
-    observeEvent(rv.dm$demoData(), {rv.dm$dataIn <- rv.dm$demoData()})
-    observeEvent(rv.dm$convertData()$trigger, {rv.dm$dataIn <- rv.dm$convertData()$value})
     
-    observeEvent(req(rv.dm$dataIn), {
-     # shinyjs::toggle('modChoosePipeline', condition = !is.null(metadata(rv.dm$dataIn)$originalTypeOfData))
-      shinyjs::toggle('modChoosePipeline', condition = T)
+    #
+    # Code for open demo dataset
+    #
+    rv.dm$result_demo_dataset <- call.func(
+      fname = paste0(funcs$open_demoDataset, '_server'),
+      args = list(id = 'open_demo_dataset'))
+    
+    output$open_demo_dataset_UI <- renderUI({
+      req(funcs)
+      req(input$dmUI == 'demo')
+      call.func(
+        fname = paste0(funcs$open_demoDataset, '_ui'),
+        args = list(id = ns('open_demo_dataset')))
     })
     
-    observeEvent(input$send, {
-      rv.dm$dataOut <- list(dataset = rv.dm$dataIn,
-                                  pipeline = rv.dm$pipeline())
+    observeEvent(req(rv.dm$result_demo_dataset()),{
+      rv.dm$dataOut <- rv.dm$result_demo_dataset()
+      })
+    
+    #
+    # Code for open dataset
+    #
+    rv.dm$result_open_dataset <- call.func(
+      fname = paste0(funcs$open_dataset, '_server'),
+      args = list(id = 'open_dataset'))
+    
+    output$open_dataset_UI <- renderUI({
+      req(funcs)
+      req(input$dmUI == 'open')
+      call.func(fname = paste0(funcs$open_dataset, '_ui'),
+                args = list(id = ns('open_dataset')))
     })
-
-    observeEvent(input$dmUI,{
-      print(input$dmUI)
-      shinyjs::toggle('mod_demo', condition = input$dmUI == 'openDemo')
-      shinyjs::toggle('mod_convert', condition = input$dmUI == 'convertFile')
-      shinyjs::toggle('mod_import', condition = input$dmUI == 'importFile')
-    })
+    
+    observeEvent(req(rv.dm$result_open_dataset()),{
+      rv.dm$dataOut <- rv.dm$result_open_dataset()
+      })
     
     reactive({rv.dm$dataOut })
   })
   
 }
 
-## To be copied in the UI
-# mod_open_demo_dataset_ui("open_demo_dataset_ui_1")
 
-## To be copied in the server
-# callModule(mod_open_demo_dataset_server, "open_demo_dataset_ui_1")
+
+library(shiny)
+
+ui <- dataManager_ui("demo")
+
+
+server <- function(input, output, session) {
+  
+  funcs <- list(convert = "DaparToolshed::convert",
+                open_dataset = "DaparToolshed::open_dataset",
+                open_demoDataset = "DaparToolshed::open_demoDataset",
+                view_dataset = "DaparViz::view_dataset",
+                infos_dataset = "DaparToolshed::infos_dataset"
+  )
+  
+  
+  rv <- reactiveValues(
+    obj = NULL
+  )
+  
+  rv$obj <- dataManager_server("demo", funcs)
+  
+  observeEvent(rv$obj(), {
+    print(rv$obj())
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)

@@ -265,6 +265,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "ProstarHome", class="active",
                 mod_homepage_ui(ns('home'))
               ),
+              tabItem(tabName = "dataManager", uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openFile", uiOutput(ns('open_dataset_UI'))),
               tabItem(tabName = "convert", uiOutput(ns('open_convert_dataset_UI'))),
               tabItem(tabName = "demoData", uiOutput(ns('open_demo_dataset_UI'))),
@@ -375,13 +376,12 @@ mainapp_server <- function(id,
     delay(ms = 3500, show("app_title"))
     delay(ms = 3800, show("app_slider_plot"))
     
-    
+    #browser()
     
     output$user <- renderUser({
       dashboardUser(
         name = "Prostar proteomics", 
-        image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
-        #image = system.file('ProstarApp/www/logo-simple.png', package='Prostar.2.0'), 
+        image = 'https://raw.githubusercontent.com/prostarproteomics/Prostar_website/master/docs/favicon.ico', 
         #title = "Prostar-proteomics",
         #subtitle = "Author", 
         footer = fluidRow(
@@ -412,78 +412,18 @@ mainapp_server <- function(id,
     #rv.core$pipeline.name <- choose_pipeline_server('pipe', package = 'MSPipelines')
     
     
+    rv.core$result_dataManager <- dataManager_server('dataManager')
     
-    
-    #
-    # Code for convert tool
-    #
-    rv.core$result_convert_dataset <- call.func(
-      fname = paste0(funcs$convert, '_server'),
-      args = list(id = 'Convert'))
-    
-    output$open_convert_dataset_UI <- renderUI({
+    output$dataManager_UI <- renderUI({
       req(funcs)
-      call.func(
-        fname = paste0(funcs$convert, '_ui'),
-        args = list(id = ns('Convert')))
+      dataManager_ui('dataManager')
     })
     
-     observeEvent(req(rv.core$result_convert_dataset()),{
-       rv.core$current.obj <- rv.core$result_convert_dataset()
-       
-        #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-     })
+    observeEvent(req(rv.core$result_dataManager()),{
+      rv.core$current.obj <- rv.core$result_dataManager()
+      })
     
     
-    #
-    # Code for open demo dataset
-    #
-    rv.core$result_demo_dataset <- call.func(
-      fname = paste0(funcs$open_demoDataset, '_server'),
-      args = list(id = 'open_demo_dataset'))
-    
-    output$open_demo_dataset_UI <- renderUI({
-      req(funcs)
-      call.func(
-        fname = paste0(funcs$open_demoDataset, '_ui'),
-        args = list(id = ns('open_demo_dataset')))
-    })
-    
-    observeEvent(req(rv.core$result_demo_dataset()),{
-      rv.core$current.obj <- rv.core$result_demo_dataset()
-      print(rv.core$current.obj)
-      # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    })
-    
-    # observe({
-    #   req(funcs)
-    #   rv.core$current.obj <- do.call(
-    #     eval(parse(text=paste0(funcs$open_demoDataset, '_server'))),
-    #     args = list(id = ns('demo_data')))
-    #   #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    #   print('rv.core$current.obj has changed')
-    # })
-     
-    
-    
-     #
-     # Code for open dataset
-     #
-    rv.core$result_open_dataset <- call.func(
-      fname = paste0(funcs$open_dataset, '_server'),
-      args = list(id = 'open_dataset'))
-
-     output$open_dataset_UI <- renderUI({
-       req(funcs)
-       call.func(fname = paste0(funcs$open_dataset, '_ui'),
-                 args = list(id = ns('open_dataset')))
-     })
-
-    observeEvent(req(rv.core$result_open_dataset()),{
-     rv.core$current.obj <- rv.core$result_open_dataset()
-     print(rv.core$current.obj)
-   # #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-    })
     
     
     #rv.core$result_convert <- Convert_server('Convert')
