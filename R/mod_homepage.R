@@ -19,10 +19,9 @@ mod_homepage_ui <- function(id){
   tagList(
     uiOutput(ns("citationText")),
     tags$hr(),
-    tags$div(style="margin-top: 50px;",
-             tags$p("")
-             ),
-    tags$br(), 
+    # tags$div(style="margin-top: 50px;",
+    #          tags$p("")
+    #          ),
     tags$br(),
     uiOutput(ns('NoteForNewVersion')),
     

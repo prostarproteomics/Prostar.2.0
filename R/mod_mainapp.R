@@ -119,7 +119,7 @@ mainapp_ui <- function(id){
               #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
               ),
           leftUi = tagList(
-            h4("Prostar"), shinydashboardPlus::dashboardBadge("2.0", color = "green"),
+            h4(style = "font-weight: bold;", "Prostar"), shinydashboardPlus::dashboardBadge("2.0", color = "green"),
             
             
             # dropdownBlock(
@@ -222,11 +222,12 @@ mainapp_ui <- function(id){
               title = "Tab 1",
               icon = icon("desktop"),
               active = TRUE,
-              actionLink('browser', 'Console')
+              actionLink(ns('browser'), 'Console'),
+              mod_settings_ui(ns('global_settings'))
             ),
             controlbarItem(
               icon = icon("paint-brush"),
-              title = "Change skin",
+              title = "Skin",
               shinydashboardPlus::skinSelector()
             )
           )
@@ -276,7 +277,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "daparviz", uiOutput(ns('EDA_UI'))),
               
               tabItem(tabName = "export", h3("Export")), # export module not yet
-              tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
+              #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               tabItem(tabName = "releaseNotes", mod_release_notes_ui(ns('rl'))),
               tabItem(tabName = "checkUpdates", mod_check_updates_ui(ns('check_updates'))),
               tabItem(tabName = "usefulLinks", insert_md_ui(ns('links_MD'))),
@@ -384,8 +385,8 @@ mainapp_server <- function(id,
     output$user <- renderUser({
       dashboardUser(
         name = "Prostar proteomics", 
-        #image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
-        image = system.file('inst/ProstarApp/www/logo-simple.png', package='Prostar.2.0'), 
+        image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
+        #image = system.file('ProstarApp/www/logo-simple.png', package='Prostar.2.0'), 
         #title = "Prostar-proteomics",
         #subtitle = "Author", 
         footer = fluidRow(
@@ -591,7 +592,7 @@ mainapp_server <- function(id,
     #mod_test_server('tutu')
     mod_homepage_server('home')
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
-  mod_release_notes_server("rl")
+    mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
     insert_md_server("links_MD", 
                          URL_links)
