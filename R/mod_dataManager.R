@@ -33,7 +33,7 @@ dataManager_ui <- function(id){
     uiOutput(ns('open_convert_dataset_UI')),
     uiOutput(ns('open_dataset_UI')),
     hr(),
-    infos_dataset_ui(ns("infos"))
+    uiOutput(ns("infos_dataset_UI"))
     )
 }
 
@@ -63,6 +63,7 @@ dataManager_server <- function(id, funcs){
       dataOut = NULL
     )
 
+  
    call.func(
      fname = paste0(funcs$infos_dataset, '_server'),
      args = list(id = 'infos',
@@ -145,7 +146,7 @@ dataManager_server <- function(id, funcs){
 
 library(shiny)
 
-ui <- dataManager_ui("demo")
+ui <- fluidPage(dataManager_ui("demo"))
 
 
 server <- function(input, output, session) {

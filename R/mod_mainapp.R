@@ -49,7 +49,7 @@ mainapp_ui <- function(id){
     
       shinydashboardPlus::dashboardPage(
         md = FALSE,
-        skin="blue",
+        skin = "blue",
         
         #skin = shinythemes::shinytheme("cerulean"),
         
@@ -119,29 +119,9 @@ mainapp_ui <- function(id){
               #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
               ),
           leftUi = tagList(
-            h4(style = "font-weight: bold;", "Prostar"), shinydashboardPlus::dashboardBadge("2.0", color = "green"),
-            
-            
-            # dropdownBlock(
-            #   id = "mydropdown2",
-            #   title = "Dropdown 2",
-            #   icon = icon("sliders"),
-            #   prettySwitch(
-            #     inputId = "switch4",
-            #     label = "Fill switch with status:",
-            #     fill = TRUE, 
-            #     status = "primary"
-            #   ),
-            #   prettyCheckboxGroup(
-            #     inputId = "checkgroup2",
-            #     label = "Click me!", 
-            #     thick = TRUE,
-            #     choices = c("Click me !", "Me !", "Or me !"),
-            #     animation = "pulse", 
-            #     status = "info"
-            #   )
-            # )
-          ),
+            h4(style = "font-weight: bold;", "Prostar"), 
+            shinydashboardPlus::dashboardBadge("2.0", color = "green")
+            ),
           
           # dropdownMenu(
           #   type = "tasks", 
@@ -182,7 +162,7 @@ mainapp_ui <- function(id){
                      badgeLabel = "todo", 
                      badgeColor = "blue"),
             hr(),
-            menuItem("Dapar Viz", 
+            menuItem("EDA", 
                      tabName = "daparviz", 
                      icon = icon("cogs"),
                      badgeLabel = "new", 
@@ -190,12 +170,9 @@ mainapp_ui <- function(id){
             hr(),
             menuItem("Help", 
                      icon = icon("question-circle"),
-                     menuSubItem("Useful Links", 
-                                 tabName = "usefulLinks"),
-                     menuSubItem("FAQ", 
-                                 tabName = "faq"),
-                     menuSubItem("Bug Report", 
-                                 tabName = "bugReport"),
+                     menuSubItem("Useful Links", tabName = "usefulLinks"),
+                     menuSubItem("FAQ", tabName = "faq"),
+                     menuSubItem("Bug Report", tabName = "bugReport"),
                      menuSubItem("Global Settings", 
                                  tabName = "globalSettings", 
                                  icon = icon("cogs")),
@@ -251,20 +228,12 @@ mainapp_ui <- function(id){
             #  tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
             #),
             
-           # shinyjs::useShinyjs(),
           div(style="margin-top: 40px;", 
             # body content
             tabItems(
-              tabItem(tabName = "ProstarHome", class="active",
-                mod_homepage_ui(ns('home'))
-              ),
+              tabItem(tabName = "ProstarHome", class="active", mod_homepage_ui(ns('home'))),
               tabItem(tabName = "dataManager", uiOutput(ns('dataManager_UI'))),
-              #tabItem(tabName = "openFile", uiOutput(ns('open_dataset_UI'))),
-              #tabItem(tabName = "convert", uiOutput(ns('open_convert_dataset_UI'))),
-              #tabItem(tabName = "demoData", uiOutput(ns('open_demo_dataset_UI'))),
-              
               tabItem(tabName = "daparviz", uiOutput(ns('EDA_UI'))),
-              
               tabItem(tabName = "export", h3("Export")), # export module not yet
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               tabItem(tabName = "releaseNotes", mod_release_notes_ui(ns('rl'))),
@@ -277,60 +246,6 @@ mainapp_ui <- function(id){
             # uiOutput('show_pipeline')
           )
         )
-
-      # mod_navbar_menu_ui('mainMenu')
-      
-      #                   fluidPage(
-      #                     navbarPage("Prostar",
-      #                     position = "fixed-top",
-      #                     id = "navPage",
-      #                     inverse = FALSE,
-      # 
-      #                     
-      #                     
-      #                     #modulePlotsUI('showPlots')
-      #                     navbarMenu("Prostar",
-      #                                tabPanel(title="Home",
-      #                                         value="HomeTab",mod_homepage_ui("homepage")),
-      #                                tabPanel(title="Global settings",
-      #                                         value="GlobalSettingsTab", mod_settings_ui("modSettings")),
-      #                                tabPanel("Release notes",
-      #                                         value="ReleaseNotesTab",mod_release_notes_ui("modReleaseNotes")),
-      #                                tabPanel("Check for updates",
-      #                                         value="CheckUpdatesTab",mod_check_updates_ui("modCheckUpdates"))
-      #                     ),
-      #                     navbarMenu("Data manager",
-      #                                tabPanel("Open MSnset",value = 'openMSnsetTab',
-      #                                         mod_open_dataset_ui('moduleOpenDataset'),
-      #                                         mod_infos_dataset_ui("infos_openFile")
-      #                                         ),
-      #                                tabPanel("Convert",value = "convertTab",
-      #                                         mod_convert_ms_file_ui('moduleProcess_Convert')
-      #                                         ),
-      #                                tabPanel("Demo data",  value='demoTab', 
-      #                                         mod_open_demo_dataset_ui('mod_OpenDemoDataset'),
-      #                                         mod_infos_dataset_ui("infos_demoDataset")
-      #                                         ),
-      #                                tabPanel(title="ReloadProstar",
-      #                                          value="ReloadTab",
-      #                                          p("Due to some instability of cache memory when successively opening several datasets in a Prostar session, data management has been simplified.
-      #                                           To work on another dataset than the current one, reloading Prostar first is now necessary (with the button above).  It will restart Prostar
-      #                                           with a fresh R session where import menus are enabled 'Dataset manager' menu."),
-      #                                          actionButton("ReloadProstar", "Reload Prostar",class = actionBtnClass)
-      #                                           )
-      #                     ),
-      #                     # navbarMenu("Data mining",
-      #                     #            tabPanel("Descriptive statistics", value='descriptiveStats', mod_all_plots_ui('modAllPlots'))
-      #                     # ),
-      #                     navbarMenu("Help",
-      #                                tabPanel("Links",value="usefulLinksTab",  mod_insert_md_ui('links_MD')),
-      #                                tabPanel("FAQ", value="faqTab",  mod_insert_md_ui('FAQ_MD')),
-      #                                tabPanel("Bug report",value="bugReportTab",  mod_bug_report_ui('bugreport')
-      # 
-      #                     )
-      #                     )
-      #                   ) ## end navbarPage
-      # )
     )
 )
 }
@@ -408,26 +323,6 @@ mainapp_server <- function(id,
       rv.core$current.obj <- rv.core$result_dataManager()
       })
     
-    
-    
-    
-    #rv.core$result_convert <- Convert_server('Convert')
-    
-     #rv.core$result_convert <- nav_server(id = 'Convert',
-     #                                     dataIn = reactive({data.frame()}))
-     
-     
-    #observeEvent(rv.core$result_convert$dataOut()$trigger,{
-      #browser()
-     # rv.core$dataIn <- rv.core$result_convert$dataOut()$value
-      #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
-   # })
-    
-    # observe({
-    #   #shinyjs::toggle('div_demoDataset', condition = !is.null(rv.core$pipeline.name()) && rv.core$pipeline.name() != 'None')
-    #   shinyjs::toggle('load_dataset_btn', condition = !is.null(rv.core$result_openDemoDataset()))
-    # })
-    # 
     observeEvent(input$browser,{browser()})
     
     # observe({
@@ -465,37 +360,7 @@ mainapp_server <- function(id,
     #   shinyjs::disabled(rv.core$pipeline$ui())
     #})
     
-    
-    # mimics loading data > body content and inactivation of import menus in sidebar
-    # observeEvent(rv.core$current.pipeline, ignoreNULL=FALSE, { 
-    #   #https://stackoverflow.com/questions/48278111/disable-enable-click-on-dashboard-sidebar-in-shiny
-    #   
-    #   if(is.null(rv.core$current.pipeline)){
-    #     # show sidebar and button sidebar
-    #     shinyjs::removeClass(selector = "body", class = "sidebar-collapse")
-    #     shinyjs::runjs("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'visible';")
-    #     
-    #     # enable import menus
-    #     shinyjs::removeCssClass(selector = "a[data-value='openFile']", class = "inactiveLink")
-    #     shinyjs::removeCssClass(selector = "a[data-value='convert']", class = "inactiveLink")
-    #     shinyjs::removeCssClass(selector = "a[data-value='demoData']", class = "inactiveLink")
-    #   }
-    #   else{ # "after data loaded"
-    #     # hide sidebar/button sidebar
-    #     shinyjs::addClass(selector = "body", class = "sidebar-collapse")
-    #     shinyjs::runjs("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';")
-    #     
-    #     # disable import menus
-    #     shinyjs::addCssClass(selector = "a[data-value='openFile']", class = "inactiveLink")
-    #     shinyjs::addCssClass(selector = "a[data-value='convert']", class = "inactiveLink")
-    #     shinyjs::addCssClass(selector = "a[data-value='demoData']", class = "inactiveLink")
-    #   } 
-    # })
-    
-    #browser()
-    
-
-      call.func(
+    call.func(
         fname = paste0(funcs$view_dataset, '_server'),
         args = list(id = 'view_dataset',
                     obj = reactive({DaparViz::convert2Viz(rv.core$current.obj)})))
