@@ -25,7 +25,10 @@ Imports: shinydashboardPlus, shiny, shinydashboard, shinyEffects
 Collate:
     global.R
     mod_format_DT.R
+    mod_infos_dataset.R
+    mod_dataManager.R
     mod_insert_md.R
+    mod_convert.R
     mod_homepage.R
     mod_bsmodal.R
     mod_view_dataset.R

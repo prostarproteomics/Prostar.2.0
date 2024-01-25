@@ -12,7 +12,8 @@ library(MagellanNTK)
 funcs <- c('convert', 
            'open_dataset', 
            'open_demoDataset',
-           'view_dataset')
+           'view_dataset',
+           'infos_dataset')
 
 # lapply(funcs, function(x){
 #   assign(paste0(x, '_ui'), eval(parse(text = paste0('generic_', x, '_ui'))))

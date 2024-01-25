@@ -171,17 +171,10 @@ mainapp_ui <- function(id){
                      selected = TRUE),
             hr(),
             menuItem("Data Manager",
+                     tabName = "dataManager",
                      icon = icon("folder"),
-                     startExpanded = TRUE,
-                     menuSubItem("Open QFeature file", 
-                                 tabName = "openFile"),
-                     menuSubItem("Convert Data", 
-                                 tabName = "convert"),
-                     menuSubItem("Demo data", 
-                                 tabName = "demoData"),
-                     menuSubItem("Export Results", 
-                                 tabName = "export")
-                     ),
+                     badgeLabel = "new", 
+                     badgeColor = "green"),
             hr(),
             menuItem("Pipeline", 
                      tabName = "pipeline", 
@@ -266,9 +259,9 @@ mainapp_ui <- function(id){
                 mod_homepage_ui(ns('home'))
               ),
               tabItem(tabName = "dataManager", uiOutput(ns('dataManager_UI'))),
-              tabItem(tabName = "openFile", uiOutput(ns('open_dataset_UI'))),
-              tabItem(tabName = "convert", uiOutput(ns('open_convert_dataset_UI'))),
-              tabItem(tabName = "demoData", uiOutput(ns('open_demo_dataset_UI'))),
+              #tabItem(tabName = "openFile", uiOutput(ns('open_dataset_UI'))),
+              #tabItem(tabName = "convert", uiOutput(ns('open_convert_dataset_UI'))),
+              #tabItem(tabName = "demoData", uiOutput(ns('open_demo_dataset_UI'))),
               
               tabItem(tabName = "daparviz", uiOutput(ns('EDA_UI'))),
               
@@ -385,17 +378,16 @@ mainapp_server <- function(id,
         #title = "Prostar-proteomics",
         #subtitle = "Author", 
         footer = fluidRow(
-          column(width = 6, socialButton(
-          href = "https://github.com/prostarproteomics/Prostar.2.0",
-          icon = icon("github")
-        )),
-        column(
-          width = 6,
-          socialButton(
-            href = "https://prostar-proteomics.org",
-            icon = icon("dropbox")
-          )
-          )),
+          column(width = 6, 
+                 socialButton(href = "https://github.com/prostarproteomics/Prostar.2.0",
+                              icon = icon("github")
+                              )),
+        column(width = 6,
+               socialButton(href = "https://prostar-proteomics.org",
+                            icon = icon("dropbox")
+                            )
+               )
+        ),
         p('TODO: Describe the web site')
       )
     })
@@ -405,18 +397,11 @@ mainapp_server <- function(id,
       js$resetProstar()
     })
     
-    
-    
-    
-    
-    #rv.core$pipeline.name <- choose_pipeline_server('pipe', package = 'MSPipelines')
-    
-    
-    rv.core$result_dataManager <- dataManager_server('dataManager')
+    rv.core$result_dataManager <- dataManager_server('dataManager', funcs)
     
     output$dataManager_UI <- renderUI({
       req(funcs)
-      dataManager_ui('dataManager')
+      dataManager_ui(ns('dataManager'))
     })
     
     observeEvent(req(rv.core$result_dataManager()),{
@@ -552,8 +537,8 @@ server <- function(input, output, session) {
   funcs <- list(convert = "DaparToolshed::convert",
                 open_dataset = "DaparToolshed::open_dataset",
                 open_demoDataset = "DaparToolshed::open_demoDataset",
-                view_dataset = "DaparViz::view_dataset"
-  )
+                view_dataset = "DaparViz::view_dataset",
+                infos_dataset = "DaparToolshed::infos_dataset")
   
   mainapp_server("main", funcs = funcs)
 }
