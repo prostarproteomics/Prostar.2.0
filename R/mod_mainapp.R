@@ -253,18 +253,13 @@ mainapp_ui <- function(id){
           "
             )
           ),
-          
-          #dashboardthemes::shinyDashboardThemes(
-          #  theme = "blue_gradient"
-          #),
 
-          tagList(
             #tags$head(
             #  tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
             #),
             
-            shinyjs::useShinyjs(),
-            
+           # shinyjs::useShinyjs(),
+          div(style="margin-top: 40px;", 
             # body content
             tabItems(
               tabItem(tabName = "ProstarHome", class="active",
@@ -288,7 +283,7 @@ mainapp_ui <- function(id){
             # uiOutput('show_pipeline')
           )
         )
-      )
+
       # mod_navbar_menu_ui('mainMenu')
       
       #                   fluidPage(
@@ -343,7 +338,7 @@ mainapp_ui <- function(id){
       #                   ) ## end navbarPage
       # )
     )
-
+)
 }
 
 # Module Server
