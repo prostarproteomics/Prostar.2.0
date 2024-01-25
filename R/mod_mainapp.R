@@ -38,6 +38,8 @@ NULL
 #' @import shiny
 #' @import shinyjs
 #' @import shinydashboard
+#' @import shinydashboardPlus
+#' @import shinyEffects
 #' @import MagellanNTK
 #' 
 mainapp_ui <- function(id){
@@ -45,10 +47,11 @@ mainapp_ui <- function(id){
   
   div(id = "header",
     
-      shinydashboard::dashboardPage(
-        #skin="blue",
+      shinydashboardPlus::dashboardPage(
+        md = FALSE,
+        skin="blue-light",
         
-        #theme = shinythemes::shinytheme("cerulean"),
+        #skin = shinythemes::shinytheme("cerulean"),
         
         # https://stackoverflow.com/questions/31711307/how-to-change-color-in-shiny-dashboard
         # orangeProstar <- "#E97D5E"
@@ -69,95 +72,198 @@ mainapp_ui <- function(id){
         ##
         ## Header
         ## 
-        shinydashboard::dashboardHeader(
-          # title on top right, shrinks when sidebar collapsed
-          tags$li(class = "dropdown",
-          #tags$style(".main-header {max-height: 20px}"),
-          #tags$style(".main-header .logo {height: 20px;}"),
-          #tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
-          #tags$style(".navbar {min-height:20px !important}"),
-          tags$style(".skin-blue .main-header .navbar {background-color: rgb(20,97,117);}")
-        ),
-          ### changing logo
-          title = dashboardthemes::shinyDashboardLogo(
-            theme = "blue_gradient",
-            boldText = "Prostar",
-            badgeText = "v2"
+        # header = dashboardHeader(
+        #   fixed = TRUE,
+        #   title = dashboardthemes::shinyDashboardLogo(theme = "blue_gradient",
+        #                                               boldText = "Prostar",
+        #                                               badgeText = "v2"),
+        #   leftUi = tagList(
+        #   actionButton('browser', 'Console'),
+        #   a(href="http://www.prostar-proteomics.org/"
+        #       # img(src=base64enc::dataURI(
+        #       #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
+        #       #   mime="image/png"))
+        #       ),
+        #    a(href="https://github.com/samWieczorek/Prostar2",
+        #       icon("github"),
+        #       title="GitHub")
+        #   )
+        # ),
+        dashboardHeader(
+          fixed = TRUE,
+          # titleWidth = "245px",
+          # title = absolutePanel(
+          #    fixed = TRUE,
+          #    height = '100px',
+          #    dashboardthemes::shinyDashboardLogo(theme = "blue_gradient",
+          #                                        boldText = "Prostar",
+          #                                        badgeText = "v2")
+          #    ),
+          # leftUi = tagList(
+          #   tags$style(".skin-blue .main-header .navbar {background-color: rgb(20,97,117);}"),
+          #   actionButton('browser', 'Console'),
+          #   a(href="http://www.prostar-proteomics.org/"
+          #     #       # img(src=base64enc::dataURI(
+          #     #       #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
+          #     #       #   mime="image/png"))
+          #            ),
+          #   a(href="https://github.com/prostarproteomics/Prostar.2.0",
+          #     icon("github"),
+          #     title="GitHub")
+          # 
+          # )
+          title = 
+            tagList(
+              span(class = "logo-lg", 
+                   absolutePanel(fixed = TRUE, "Menu"))
+              #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
+              ),
+          leftUi = tagList(
+            h4("Prostar"), shinydashboardPlus::dashboardBadge("2.0", color = "green"),
+            
+            
+            # dropdownBlock(
+            #   id = "mydropdown2",
+            #   title = "Dropdown 2",
+            #   icon = icon("sliders"),
+            #   prettySwitch(
+            #     inputId = "switch4",
+            #     label = "Fill switch with status:",
+            #     fill = TRUE, 
+            #     status = "primary"
+            #   ),
+            #   prettyCheckboxGroup(
+            #     inputId = "checkgroup2",
+            #     label = "Click me!", 
+            #     thick = TRUE,
+            #     choices = c("Click me !", "Me !", "Or me !"),
+            #     animation = "pulse", 
+            #     status = "info"
+            #   )
+            # )
           ),
-          # title = tagList(
-          #   tags$span(
-          #     class = "logo-mini", style =  "font-size : 14px","Prostar"),
-          #   tags$span(
-          #     class = "logo-lg", "Prostar")
+          
+          # dropdownMenu(
+          #   type = "tasks", 
+          #   badgeStatus = "danger",
+          #   taskItem(value = 20, color = "aqua", "Refactor code"),
+          #   taskItem(value = 40, color = "green", "Design new layout"),
+          #   taskItem(value = 60, color = "yellow", "Another task"),
+          #   taskItem(value = 80, color = "red", "Write documentation")
           # ),
-          # button to mimic data loaded
-          tags$li(class="dropdown", actionButton('browser', 'Console')),
-          # links Prostar website and github
-          tags$li(class="dropdown",
-            a(href="http://www.prostar-proteomics.org/"
-              # img(src=base64enc::dataURI(
-              #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
-              #   mime="image/png"))
-              )
-            ),
-                # img(src="www/images/LogoProstarComplet.png",
-                # title="Prostar website",
-                # height="17px"))),
-          tags$li(class="dropdown",
-            a(href="https://github.com/samWieczorek/Prostar2",
-              icon("github"),
-              title="GitHub"))
+          userOutput(ns("user"))
         ),
-        
         ##
         ## Sidebar
         ## 
-        shinydashboard::dashboardSidebar(
-          shinydashboard::sidebarMenu(id = "sb",
+        sidebar = dashboardSidebar(
+          #fixed = TRUE,
+          sidebarMenu(id = "sb",
+                      #style = "position: fixed; overflow: visible;",
             # inactiveClass for import menus inactivation 
-            tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
+           # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
+            
             # Menus and submenus in sidebar
-            br(),
-            shinydashboard::menuItem("Home", 
+            #br(),
+            menuItem("Home", 
                      tabName = "ProstarHome", 
                      icon = icon("home"),
                      selected = TRUE),
             hr(),
-            shinydashboard::menuItem("Data Manager", 
-              icon = icon("folder"), 
-              startExpanded = TRUE,
-              shinydashboard::menuSubItem("Open QFeature file", tabName = "openFile"),
-              shinydashboard::menuSubItem("Convert Data", tabName = "convert"),
-              shinydashboard::menuSubItem("Demo data", tabName = "demoData"),
-              shinydashboard::menuSubItem("Export Results", tabName = "export")
+            menuItem("Data Manager",
+                     icon = icon("folder"),
+                     startExpanded = TRUE,
+                     menuSubItem("Open QFeature file", 
+                                 tabName = "openFile"),
+                     menuSubItem("Convert Data", 
+                                 tabName = "convert"),
+                     menuSubItem("Demo data", 
+                                 tabName = "demoData"),
+                     menuSubItem("Export Results", 
+                                 tabName = "export")
+                     ),
+            hr(),
+            menuItem("Pipeline", 
+                     tabName = "pipeline", 
+                     icon = icon("cogs"),
+                     badgeLabel = "todo", 
+                     badgeColor = "blue"),
+            hr(),
+            menuItem("Dapar Viz", 
+                     tabName = "daparviz", 
+                     icon = icon("cogs"),
+                     badgeLabel = "new", 
+                     badgeColor = "green"),
+            hr(),
+            menuItem("Help", 
+                     icon = icon("question-circle"),
+                     menuSubItem("Useful Links", 
+                                 tabName = "usefulLinks"),
+                     menuSubItem("FAQ", 
+                                 tabName = "faq"),
+                     menuSubItem("Bug Report", 
+                                 tabName = "bugReport"),
+                     menuSubItem("Global Settings", 
+                                 tabName = "globalSettings", 
+                                 icon = icon("cogs")),
+                     menuSubItem("Release Notes", 
+                                 tabName = "releaseNotes", 
+                                 icon = icon("clipboard")),
+                     menuSubItem("Check for Updates", 
+                                 tabName = "checkUpdates", 
+                                 icon = icon("wrench"))
+                     )
+            )
+        ),
+        controlbar = dashboardControlbar(
+          skin = "dark",
+          controlbarMenu(
+            controlbarItem(
+              title = "Tab 1",
+              icon = icon("desktop"),
+              active = TRUE,
+              actionLink('browser', 'Console')
             ),
-            hr(),
-            shinydashboard::menuItem("Pipeline", tabName = "pipeline", icon = icon("cogs")),
-            hr(),
-            shinydashboard::menuItem("Dapar Viz", tabName = "daparviz", icon = icon("cogs")),
-            hr(),
-            shinydashboard::menuItem("Help", 
-              icon = icon("question-circle"),
-              shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
-              shinydashboard::menuSubItem("FAQ", tabName = "faq"),
-              shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
-              shinydashboard::menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
-              shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
-              shinydashboard:: menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
+            controlbarItem(
+              icon = icon("paint-brush"),
+              title = "Tab 2",
+              skinSelector()
             )
           )
         ),
-        
-        shinydashboard::dashboardBody(
+        body = dashboardBody(
+          # use a bit of shinyEffects
+          setShadow(class = "dropdown-menu"),
+          setShadow(class = "box"),
           
-          dashboardthemes::shinyDashboardThemes(
-            theme = "blue_gradient"
+          # some styling
+          tags$head(
+            tags$style(
+              rel = "stylesheet",
+              type = "text/css",
+              href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/qtcreator_dark.min.css"
+            ),
+            tags$script(
+              src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+            ),
+            tags$script(
+              "$(function() {
+            $('.sidebar-toggle').on('click', function() {
+              $('.skinSelector-widget').toggle();
+            });
+          });
+          "
+            )
           ),
+          
+          #dashboardthemes::shinyDashboardThemes(
+          #  theme = "blue_gradient"
+          #),
 
           tagList(
-            tags$head(
-              tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
-            ),
+            #tags$head(
+            #  tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+            #),
             
             shinyjs::useShinyjs(),
             
@@ -299,6 +405,8 @@ mainapp_ui <- function(id){
 mainapp_server <- function(id,
                            funcs = NULL){
   
+  source(system.file("ProstarApp/global.R", package = 'Prostar.2.0'))$value
+  
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
@@ -321,6 +429,28 @@ mainapp_server <- function(id,
     delay(ms = 3800, show("app_slider_plot"))
     
     
+    
+    output$user <- renderUser({
+      dashboardUser(
+        name = "Prostar proteomics", 
+        image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
+        #title = "Prostar-proteomics",
+        #subtitle = "Author", 
+        footer = fluidRow(
+          column(width = 6, socialButton(
+          href = "https://github.com/prostarproteomics/Prostar.2.0",
+          icon = icon("github")
+        )),
+        column(
+          width = 6,
+          socialButton(
+            href = "https://prostar-proteomics.org",
+            icon = icon("dropbox")
+          )
+          )),
+        p('TODO: Describe the web site')
+      )
+    })
     
     
     observeEvent(input$ReloadProstar, {

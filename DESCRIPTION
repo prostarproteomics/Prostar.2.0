@@ -21,9 +21,10 @@ License: Artistic-2.0
 Depends: R (>= 4.2.2)
 Suggests: BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass
-Imports: shinydashboardPlus, shiny, shinydashboard
+Imports: shinydashboardPlus, shiny, shinydashboard, shinyEffects
 Collate:
     global.R
+    mod_format_DT.R
     mod_insert_md.R
     mod_homepage.R
     mod_bsmodal.R
@@ -34,7 +35,6 @@ Collate:
     mod_bug_report.R
     mod_download.R
     mod_download_btns.R
-    mod_format_DT.R
     mod_navbar_menu.R
     mod_open_dataset.R
     mod_popover_for_help.R
