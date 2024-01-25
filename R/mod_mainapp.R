@@ -49,7 +49,7 @@ mainapp_ui <- function(id){
     
       shinydashboardPlus::dashboardPage(
         md = FALSE,
-        skin="blue-light",
+        skin="blue",
         
         #skin = shinythemes::shinytheme("cerulean"),
         
@@ -226,15 +226,12 @@ mainapp_ui <- function(id){
             ),
             controlbarItem(
               icon = icon("paint-brush"),
-              title = "Tab 2",
-              skinSelector()
+              title = "Change skin",
+              shinydashboardPlus::skinSelector()
             )
           )
         ),
         body = dashboardBody(
-          # use a bit of shinyEffects
-          setShadow(class = "dropdown-menu"),
-          setShadow(class = "box"),
           
           # some styling
           tags$head(
@@ -272,66 +269,20 @@ mainapp_ui <- function(id){
               tabItem(tabName = "ProstarHome", class="active",
                 mod_homepage_ui(ns('home'))
               ),
-              tabItem(tabName = "openFile", h3("Open QFeature file"),
-                      uiOutput(ns('open_dataset_UI'))),
-              tabItem(tabName = "convert", 
-                tagList(
-                  h3("Convert datas"),
-                  uiOutput(ns('open_convert_dataset_UI'))
-                )
-              ),
-              tabItem(tabName = "demoData", 
-                tagList(
-                  h3("Load a demo dataset"),
-                  div(
-                    # div(
-                    #   style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-                    #   choose_pipeline_ui("pipe")
-                    # ),
-                    div(
-                      style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-                      #shinyjs::hidden(
-                      # div(id='div_demoDataset',
-                      uiOutput(ns('open_demo_dataset_UI'))
-                      # )
-                      # )
-                    ),
-                    # div(
-                    #   style="display:inline-block; vertical-align: middle; padding-right: 20px;",
-                    #   actionButton('load_dataset_btn', 'Load dataset', class=actionBtnClass)
-                    # )
-                  )
-                )
-              ),
+              tabItem(tabName = "openFile", uiOutput(ns('open_dataset_UI'))),
+              tabItem(tabName = "convert", uiOutput(ns('open_convert_dataset_UI'))),
+              tabItem(tabName = "demoData", uiOutput(ns('open_demo_dataset_UI'))),
               
-              tabItem(tabName = "daparviz", 
-                tagList(
-                  uiOutput(ns('EDA_UI'))
-                )
-              ),
-              
+              tabItem(tabName = "daparviz", uiOutput(ns('EDA_UI'))),
               
               tabItem(tabName = "export", h3("Export")), # export module not yet
-              tabItem(tabName = "globalSettings", 
-                      h3('Global settings'),
-                      mod_settings_ui(ns('global_settings'))),
-              tabItem(tabName = "releaseNotes",
-                      h3('Release notes'),
-                      mod_release_notes_ui(ns('rl'))),
-              tabItem(tabName = "checkUpdates",
-                      h3('Check for updates'),
-                      mod_check_updates_ui(ns('check_updates'))),
-              tabItem(tabName = "usefulLinks",
-                insert_md_ui(ns('links_MD'))),
-              tabItem(tabName = "faq",
-                insert_md_ui(ns('FAQ_MD'))),
-              tabItem(tabName = "bugReport", 
-                      h3('Bug report'),
-                      mod_bug_report_ui(ns("bug_report"))),
-              tabItem(tabName = "pipeline",
-                      h3('Pipeline'),
-                      uiOutput(ns('show_pipeline'))
-                      )
+              tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
+              tabItem(tabName = "releaseNotes", mod_release_notes_ui(ns('rl'))),
+              tabItem(tabName = "checkUpdates", mod_check_updates_ui(ns('check_updates'))),
+              tabItem(tabName = "usefulLinks", insert_md_ui(ns('links_MD'))),
+              tabItem(tabName = "faq", insert_md_ui(ns('FAQ_MD'))),
+              tabItem(tabName = "bugReport", mod_bug_report_ui(ns("bug_report"))),
+              tabItem(tabName = "pipeline", uiOutput(ns('show_pipeline')))
             )
             # uiOutput('show_pipeline')
           )
@@ -433,7 +384,8 @@ mainapp_server <- function(id,
     output$user <- renderUser({
       dashboardUser(
         name = "Prostar proteomics", 
-        image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
+        #image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
+        image = system.file('inst/ProstarApp/www/logo-simple.png', package='Prostar.2.0'), 
         #title = "Prostar-proteomics",
         #subtitle = "Author", 
         footer = fluidRow(
