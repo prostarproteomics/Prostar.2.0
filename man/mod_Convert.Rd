@@ -2,16 +2,16 @@
 % Please edit documentation in R/mod_convert.R
 \name{mod_Convert}
 \alias{mod_Convert}
-\alias{Convert_conf}
-\alias{Convert_ui}
-\alias{Convert_server}
+\alias{convert_conf}
+\alias{convert_ui}
+\alias{convert_server}
 \title{mod_choose_pipeline_ui and mod_choose_pipeline_server}
 \usage{
-Convert_conf()
+convert_conf()
 
-Convert_ui(id)
+convert_ui(id)
 
-Convert_server(id)
+convert_server(id)
 }
 \arguments{
 \item{id}{shiny id}

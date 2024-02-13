@@ -1,8 +1,6 @@
-# Module UI
-
-#' @title   mod_open_demo_dataset_ui and mod_open_demo_dataset_server
+#' @title mod_open_demo_dataset_ui and mod_open_demo_dataset_server
 #' 
-#' @description  A shiny Module.
+#' @description A shiny Module.
 #' 
 #' @param id xxx
 #' 
@@ -28,9 +26,8 @@ infos_dataset_ui <- function(id){
   )
 }
 
-# Module Server
 
-#' @rdname info_dataset
+#' @rdname infos_dataset
 #' 
 #' @export
 #' @importFrom BiocGenerics get

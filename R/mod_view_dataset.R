@@ -1,12 +1,10 @@
-# Module UI
-
 #' @title   mod_open_demo_dataset_ui and mod_open_demo_dataset_server
 #' 
 #' @description  A shiny Module.
 #' 
 #' @param id xxx
 #' 
-#' @name view_dataset_dataset
+#' @name view_dataset
 #'
 #' @keywords internal
 #' 
@@ -16,7 +14,7 @@ NULL
 
 
 #' @export 
-#' @rdname view_dataset_dataset
+#' @rdname view_dataset
 #' @importFrom shiny NS tagList 
 #' @import shinyjs
 #' @import DaparViz
@@ -28,7 +26,6 @@ view_dataset_ui <- function(id){
   )
 }
 
-# Module Server
 
 #' @rdname view_dataset
 #'  

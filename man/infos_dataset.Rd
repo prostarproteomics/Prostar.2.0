@@ -3,9 +3,17 @@
 \name{infos_dataset}
 \alias{infos_dataset}
 \alias{infos_dataset_ui}
+\alias{infos_dataset_server}
 \title{mod_open_demo_dataset_ui and mod_open_demo_dataset_server}
 \usage{
 infos_dataset_ui(id)
+
+infos_dataset_server(
+  id,
+  obj = reactive({
+     NULL
+ })
+)
 }
 \arguments{
 \item{id}{xxx}

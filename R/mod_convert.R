@@ -13,7 +13,7 @@ NULL
 #' @rdname mod_Convert
 #' @export
 #' 
-Convert_conf <- function(){
+convert_conf <- function(){
   
 }
 
@@ -28,7 +28,7 @@ Convert_conf <- function(){
 #' @import shiny
 #' @return NA
 #'
-Convert_ui <- function(id) {
+convert_ui <- function(id) {
   ns <- NS(id)
   h3(style="color: blue;", '-- Default convert module --')
 }
@@ -39,12 +39,14 @@ Convert_ui <- function(id) {
 #' @import shiny
 #' @rdname mod_Convert
 #'
-Convert_server <- function(id) {
+convert_server <- function(id) {
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     
+    
+    return(reactive({NULL}))
   })
 
 }

@@ -35,6 +35,10 @@ bsmodal_ui <- function(id){
 #' @export
 #'
 #' @rdname bsmodal
+#' 
+#' @import shiny
+#' @import shinyBS
+#' @import shinyjqui
 #'
 bsmodal_server <- function(id,
                            title = NULL,
@@ -81,6 +85,7 @@ bsmodal_server <- function(id,
                          
                          title = title,
                          trigger = ns("openModalBtn"),
+                         footer = NULL,
                          uiContent
         )
         #  )

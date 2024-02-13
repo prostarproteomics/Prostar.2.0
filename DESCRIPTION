@@ -18,9 +18,9 @@ Description: This package provides a GUI interface for the DAPAR package. The
 biocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, 
     Software, GUI
 License: Artistic-2.0
-Depends: R (>= 4.2.2)
+Depends: R (>= 4.4.0)
 Suggests: BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
-    gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass
+    gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass, tibble
 Imports: shinydashboardPlus, shiny, shinydashboard, shinyEffects
 Collate:
     global.R
@@ -49,7 +49,7 @@ Collate:
     mod_loadapp.R
     mod_mainapp.R
 NeedsCompilation: no
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
 Packaged: 2017-10-13 06:25:55 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/
